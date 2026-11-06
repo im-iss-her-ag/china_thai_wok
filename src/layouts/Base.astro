@@ -1,0 +1,135 @@
+---
+import '../styles/global.css';
+import Sprite from '../components/Sprite.astro';
+import { site, notice, R } from '../lib/site';
+import { getImage } from 'astro:assets';
+import ogSrc from '../assets/images/hero-wok.jpg';
+
+interface Props {
+  title: string;
+  description: string;
+  page?: 'home' | 'menu' | 'legal';
+  jsonld?: object[];
+  noindex?: boolean;
+}
+const { title, description, page = 'home', jsonld = [], noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const og = await getImage({ src: ogSrc, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const ogUrl = new URL(og.src, Astro.site);
+
+const restaurant = {
+  '@context': 'https://schema.org',
+  '@type': 'Restaurant',
+  '@id': new URL('/#restaurant', Astro.site).href,
+  name: site.name,
+  description: site.slogan,
+  url: new URL('/', Astro.site).href,
+  image: ogUrl.href,
+  telephone: R.phoneE164,
+  servesCuisine: ['Chinesisch', 'Thailändisch', 'Asiatisch'],
+  priceRange: '€',
+  acceptsReservations: false,
+  hasMenu: new URL('/speisekarte/', Astro.site).href,
+  address: { '@type': 'PostalAddress', streetAddress: site.street, postalCode: site.zip, addressLocality: site.city, addressCountry: 'DE' },
+  openingHoursSpecification: [
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], opens: '10:30', closes: '15:00' },
+    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], opens: '17:00', closes: '21:30' },
+  ],
+};
+const nav = [
+  { href: '/', t: 'Startseite', key: 'home' },
+  { href: '/speisekarte/', t: 'Speisekarte', key: 'menu' },
+];
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  {noindex && <meta name="robots" content="noindex, follow" />}
+  <meta name="theme-color" content="#0E2B25" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <meta property="og:type" content="restaurant" />
+  <meta property="og:locale" content="de_DE" />
+  <meta property="og:site_name" content={site.name} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogUrl} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json" set:html={JSON.stringify([restaurant, ...jsonld])} />
+  <script is:inline>
+    (function (d) {
+      d.classList.add('js');
+      try {
+        if (location.pathname === '/' && !sessionStorage.getItem('ctw-intro') && !matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('intro');
+      } catch (e) {}
+    })(document.documentElement);
+  </script>
+</head>
+<body class={page === 'home' ? 'is-home' : ''}>
+  <a class="skip" href="#main">Zum Inhalt springen</a>
+  <Sprite />
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cur" aria-hidden="true"><span>ANSEHEN</span></div><div class="cur-dot" aria-hidden="true"></div>
+
+  {page === 'home' && (
+    <div class="curtain" id="curtain" aria-hidden="true" hidden>
+      <i></i><i></i>
+      <div class="cmark"><div><b><span>{site.name}</span></b><small>{site.city.toUpperCase()}</small></div></div>
+    </div>
+  )}
+
+  <header class="hdr" id="hdr">
+    <div class="wrap">
+      <a class="brand" href="/" aria-label={`${site.name} – Startseite`}><span class="slot" aria-hidden="true"><svg><use href="#i-bowl" /></svg></span>{site.name}</a>
+      <nav aria-label="Hauptnavigation">
+        {nav.map((n) => <a href={n.href} aria-current={page === n.key ? 'page' : undefined}><span data-t={n.t}>{n.t}</span></a>)}
+      </nav>
+      <a class="btn call" href={site.tel} data-mag><span>{site.phone}</span><span class="ic"><svg><use href="#i-phone" /></svg></span><span class="sr-only">Anrufen</span></a>
+      <button class="menu-btn" id="menuOpen" aria-label="Menü öffnen" aria-controls="mnav" aria-expanded="false"><svg><use href="#i-menu" /></svg></button>
+    </div>
+  </header>
+  <div class="mnav" id="mnav" aria-hidden="true">
+    <button class="close" id="menuClose" aria-label="Menü schließen"><svg width="20" height="20"><use href="#i-close" /></svg></button>
+    {nav.map((n) => <a class="big" href={n.href}>{n.t}</a>)}
+    <a class="big" style="color:var(--gold)" href={site.tel}>{site.phone}</a>
+    <p>Di – So · 10:30 – 15:00 · 17:00 – 21:30<br />{site.street}, {site.zip} {site.city}</p>
+  </div>
+
+  <main id="main">
+    {notice && <div class="notice" role="status"><b>Hinweis</b>{notice}</div>}
+    <slot />
+  </main>
+
+  <footer class="foot">
+    <svg class="cloud cl drift" style="left:-60px;bottom:250px" aria-hidden="true"><use href="#cl-a" /></svg>
+    <svg class="cloud cl drift r" style="right:-30px;top:280px;width:220px" aria-hidden="true"><use href="#cl-b" /></svg>
+    <div class="wrap">
+      <span class="kicker" style="color:var(--gold)">Hunger?</span>
+      <div class="cta"><a class="tel" href={site.tel} data-hover="ANRUFEN">{site.phone}</a><a class="btn" href="/speisekarte/" data-mag><span>Speisekarte</span><span class="ic"><svg><use href="#i-arrow" /></svg></span></a></div>
+      <div class="cols">
+        <div><h2>Adresse</h2><p>{site.name}<br />{site.street}<br />{site.zip} {site.city}</p><p style="margin-top:10px"><a href={site.mapsUrl} target="_blank" rel="noopener" style="color:var(--gold)">Route planen →</a></p></div>
+        <div><h2>Öffnungszeiten</h2><p>Di – So · 10:30 – 15:00<br />und 17:00 – 21:30<br />Mo Ruhetag (an Feiertagen geöffnet)</p></div>
+        <div><h2>Lieferservice</h2><p>{site.delivery.hours}<br />Mindestbestellwert {site.delivery.min} € in {site.city}<br />ab {site.delivery.promoFrom} €: 1 Flasche Wein gratis</p></div>
+      </div>
+      <div class="word" aria-hidden="true">{site.name}</div>
+      <div class="bot"><span>© {year} {site.name} · Inh. {R.owner}</span><span><a href="/impressum/">Impressum</a> · <a href="/datenschutz/">Datenschutz</a></span></div>
+    </div>
+  </footer>
+
+  <nav class="mbar" id="mbar" aria-label="Schnellzugriff">
+    <a href="/speisekarte/"><svg aria-hidden="true"><use href="#i-bowl" /></svg>Speisekarte</a>
+    <a class="call" href={site.tel}><svg aria-hidden="true"><use href="#i-phone" /></svg>Anrufen</a>
+  </nav>
+
+  <script>
+    import '../scripts/main.ts';
+  </script>
+</body>
+</html>

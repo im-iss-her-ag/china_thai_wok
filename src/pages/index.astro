@@ -1,0 +1,281 @@
+---
+import Base from '../layouts/Base.astro';
+import Img from '../components/Img.astro';
+import { site, signature, euro, dishCount, categories } from '../lib/site';
+
+const cuisines = [
+  { n: '01', k: 'China', img: 'cuisine-china', minis: ['dish-ente', 'cat-huhn', 'dish-reis'], title: 'Kantonesische', em: 'Klassiker', text: 'Knusprige Ente, Huhn süß-sauer, gebratener Reis – die Gerichte, für die man wiederkommt.', links: [['Ente', 'ente'], ['Hühnerfleisch', 'huehnerfleisch'], ['Großgerichte', 'grossgerichte'], ['Gebratener Reis', 'gebratener-reis']], kc: 'var(--gold-ink)' },
+  { n: '02', k: 'Thailand', img: 'cuisine-thai', minis: ['dish-curry', 'dish-suppe', 'cat-knuspriges-huhn'], title: 'Curry &', em: 'Zitronengras', text: 'Rotes Curry, Kokosmilch, Tom Ka Gai – duftend, frisch und auf Wunsch richtig scharf.', links: [['Thai-Spezialitäten', 'thai-spezialitaeten'], ['Vegetarisch & Tofu', 'vegetarisch-tofu'], ['Suppen', 'vorspeisen']], kc: 'var(--jade-3)' },
+  { n: '03', k: 'Wok', img: 'cuisine-wok', minis: ['dish-padthai', 'cat-glasnudeln', 'dish-garnelen'], title: 'Große', em: 'Hitze.', text: 'Gebratene Nudeln, Glasnudeln, Meeresfrüchte – in Sekunden über offener Flamme.', links: [['Gebratene Nudeln', 'gebratene-nudeln'], ['Glasnudeln', 'gebratene-glasnudeln'], ['Meeresfrüchte', 'meeresfruechte']], kc: 'var(--gold)' },
+  { n: '04', k: 'Udon', img: 'cuisine-udon', minis: ['cat-rind', 'dish-grossgericht', 'cat-sossen'], title: 'Dicke Nudeln,', em: 'Ihre Soße.', text: 'Udon mit Gemüse, Huhn, Rind, Ente oder Garnelen – mit Soße nach Wahl.', links: [['Udon', 'udon'], ['Extra Soßen', 'extra-sossen']], kc: 'var(--jade)' },
+];
+
+const burst = [
+  { img: 'dish-ente', x: -34, y: -26, r: -12, w: 15, mw: 34, ar: '4/5' },
+  { img: 'cuisine-thai', x: -10, y: -33, r: 8, w: 12, mw: 26, ar: '1/1' },
+  { img: 'dish-padthai', x: 15, y: -30, r: -5, w: 13, mw: 30, ar: '4/5' },
+  { img: 'cuisine-udon', x: 36, y: -18, r: 14, w: 15, mw: 30, ar: '4/5' },
+  { img: 'dish-curry', x: -38, y: 14, r: 6, w: 13, mw: 30, ar: '1/1' },
+  { img: 'cuisine-wok', x: 38, y: 18, r: -10, w: 14, mw: 32, ar: '4/5' },
+  { img: 'dish-fruehlingsrollen', x: -22, y: 32, r: 10, w: 13, mw: 28, ar: '4/3' },
+  { img: 'dish-garnelen', x: 4, y: 34, r: -7, w: 12, mw: 26, ar: '1/1' },
+  { img: 'dish-reis', x: 24, y: 33, r: 5, w: 13, mw: 28, ar: '4/3' },
+];
+const space = [
+  { img: 'interior-1', alt: 'Gastraum mit warmem Licht', cap: 'Gemütlich essen' },
+  { img: 'interior-2', alt: 'Gedeckte Tische im Restaurant', cap: 'Platz für Familie & Freunde' },
+  { img: 'interior-3', alt: 'Asiatische Dekoration im Gastraum', cap: 'Asiatisches Ambiente' },
+  { img: 'interior-4', alt: 'Blick in den Gastraum', cap: 'Willkommen bei uns' },
+];
+
+const desc = `${site.name} in ${site.city}: chinesische & thailändische Küche frisch aus dem Wok. Abholung & Lieferservice ab ${site.delivery.min} € – jetzt bestellen unter ${site.phone}.`;
+---
+<Base title={`${site.name} ${site.city} – Chinesisch & Thai Essen, Lieferservice`} description={desc} page="home">
+
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="h1">
+    <svg class="cloud cl1 drift" aria-hidden="true"><use href="#cl-a" /></svg>
+    <svg class="cloud cl2 drift r" aria-hidden="true"><use href="#cl-b" /></svg>
+    <div class="wrap body">
+      <div>
+        <span class="kicker" style="color:var(--gold)">{site.city} · China · Thai · Wok</span>
+        <h1 id="h1" style="margin-top:26px">
+          <span class="sr-only">{site.name} – asiatisches Restaurant in {site.city}: </span>
+          <span class="rl"><span>Asiatisch.</span></span>
+          <span class="rl"><span>Frisch aus</span></span>
+          <span class="rl"><span>dem <span class="g">W<span class="disc" aria-hidden="true"><Img tag="span" name="dish-grossgericht" alt="" widths={[240]} sizes="160px" eager /></span><span class="sr-only">o</span>k.</span></span></span>
+        </h1>
+        <p class="lead">Chinesische und thailändische Küche – bei großer Hitze, in Sekunden, immer frisch zubereitet. Zum Mitnehmen oder geliefert.</p>
+        <div class="ctas">
+          <a class="btn" href="/speisekarte/" data-mag><span>Speisekarte</span><span class="ic"><svg><use href="#i-arrow" /></svg></span></a>
+          <a class="btn ghost" href={site.tel} data-mag style="color:var(--rice)">{site.phone}</a>
+        </div>
+      </div>
+      <div class="gatebox">
+        <svg class="steam" viewBox="0 0 100 120" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M30 110C20 85 45 75 32 50S40 15 30 5" /><path d="M52 110C42 85 67 75 54 50S62 15 52 5" /><path d="M74 110C64 85 89 75 76 50S84 15 74 5" /></svg>
+        <svg class="ring-text" viewBox="0 0 400 400" aria-hidden="true">
+          <defs><path id="circ" d="M200 200m-176 0a176 176 0 1 1 352 0a176 176 0 1 1-352 0" /></defs>
+          <text><textPath href="#circ">Immer frisch zubereitet · Aus dem Wok · China · Thailand · Udon ·</textPath></text>
+        </svg>
+        <div class="gate" id="gate" data-hover="WOK"><Img name="hero-wok" alt="Wok über offener Flamme" widths={[480, 800, 1000]} sizes="(max-width: 900px) 66vw, 480px" eager /></div>
+        <div class="badge" aria-hidden="true"><b>{dishCount}</b><span>Gerichte<br />frisch</span></div>
+      </div>
+    </div>
+    <div class="bar"><div class="wrap"><span>Di – So <b>10:30 – 15:00 · 17:00 – 21:30</b></span><span>Lieferung ab <b>{site.delivery.min} €</b></span><span>{site.street} · {site.city}</span></div></div>
+  </section>
+
+  <!-- STATEMENT -->
+  <section class="statement" aria-label="Philosophie">
+    <svg class="cloud drift st-cl" style="position:absolute;left:-50px;bottom:90px;width:260px" aria-hidden="true"><use href="#cl-b" /></svg>
+    <div class="floaters" aria-hidden="true">
+      <div class="fl f1" data-par="-0.12"><Img name="dish-ente" alt="" widths={[400]} sizes="260px" /></div>
+      <div class="fl f2" data-par="0.1"><Img name="dish-curry" alt="" widths={[300]} sizes="170px" /></div>
+      <div class="fl f3" data-par="-0.2"><Img name="dish-fruehlingsrollen" alt="" widths={[240]} sizes="120px" /></div>
+    </div>
+    <div class="wrap">
+    <span class="kicker muted" style="margin-bottom:40px;display:inline-flex">01 — Philosophie</span>
+    <p data-words>Wir kochen, wie man in Asien kocht: <span class="inl" aria-hidden="true"><Img tag="span" name="zoom-wok" alt="" widths={[240]} sizes="120px" /></span> große Flamme, <span class="g">frische Zutaten,</span> keine Abkürzungen. Von Kanton bis Bangkok <span class="inl" aria-hidden="true"><Img tag="span" name="cuisine-thai" alt="" widths={[240]} sizes="120px" /></span> – jedes Gericht entsteht erst, <span class="g">wenn Sie bestellen.</span></p>
+  </div></section>
+
+  <!-- #4 FENSTER: fixierter Hintergrund -->
+  <section class="window" aria-labelledby="winH">
+    <div class="bg" aria-hidden="true"><Img name="bg-laternen" alt="" sizes="100vw" /></div>
+    <div class="wrap">
+      <span class="kicker">Über uns</span>
+      <h2 class="big" id="winH" data-words>Ein Stück Asien mitten in Thüringen: <span class="g">heißer Wok,</span> frische Kräuter und echte Handarbeit – jeden Tag, <span class="g">Teller für Teller.</span></h2>
+      <p class="sub">Seit Jahren kochen wir in {site.city} chinesische und thailändische Klassiker – schnell, ehrlich und immer frisch.</p>
+    </div>
+  </section>
+
+  <!-- #3 FEATURES: Text links, Bild rechts -->
+  <section class="features" aria-label="Spezialitäten">
+    <svg class="swirl" style="left:-120px;top:120px;width:620px" aria-hidden="true"><use href="#swirl" /></svg>
+    <svg class="swirl" style="right:-160px;bottom:80px;width:700px" aria-hidden="true"><use href="#swirl" /></svg>
+    <div class="wrap">
+      <div class="feature">
+        <div class="ftxt" data-rv>
+          <span class="kicker" style="color:var(--gold-ink)">Spezialität des Hauses</span>
+          <h2><span class="g">Knusprige</span>Ente.</h2>
+          <p>Außen kross, innen saftig: Unsere Ente wird nach Hongkong-Art zubereitet und mit Soße Ihrer Wahl serviert – ob Mango, Erdnuss, rotes Curry oder klassisch süß-sauer. Als Teller oder als halbe Ente für den großen Hunger.</p>
+          <ul><li>Über 20 Entengerichte auf der Karte</li><li>Halbe Ente ab 18,50 €</li><li>Mit Reis oder gebratenen Nudeln</li></ul>
+          <a class="btn dark" href="/speisekarte/#ente" data-mag><span>Zu den Entengerichten</span><span class="ic"><svg><use href="#i-arrow" /></svg></span></a>
+        </div>
+        <div class="fimg">
+          <div class="slice" aria-hidden="true"><Img name="chef" alt="" widths={[300]} sizes="120px" /></div>
+          <span class="frame" aria-hidden="true"></span><span class="corner tl" aria-hidden="true"></span><span class="corner br" aria-hidden="true"></span>
+          <div class="main" data-clip><Img name="dish-ente" alt="Knusprige Ente nach Hongkong-Art" widths={[560, 900]} sizes="(max-width: 960px) 90vw, 560px" /></div>
+          <div class="stamp" aria-hidden="true">Nr. 75<small>Empfehlung</small></div>
+        </div>
+      </div>
+      <div class="feature rev">
+        <div class="ftxt" data-rv>
+          <span class="kicker" style="color:var(--jade-3)">Partyservice</span>
+          <h2><span class="g">Feiern</span>mit Wok.</h2>
+          <p>Geburtstag, Firmenfeier oder Weihnachtsfeier: Wir liefern alle Gerichte unserer Karte in Warmhaltebehältern direkt zu Ihnen – heiß, pünktlich und in der Menge, die Sie brauchen.</p>
+          <ul><li>Alle Gerichte der Speisekarte</li><li>Geliefert in Warmhaltebehältern</li><li>Einfach telefonisch anfragen</li></ul>
+          <a class="btn" href={site.tel} data-mag><span>Jetzt anfragen</span><span class="ic"><svg><use href="#i-phone" /></svg></span></a>
+        </div>
+        <div class="fimg">
+          <div class="slice" aria-hidden="true"><Img name="dish-fruehlingsrollen" alt="" widths={[300]} sizes="120px" /></div>
+          <span class="frame" aria-hidden="true"></span><span class="corner tl" aria-hidden="true"></span><span class="corner br" aria-hidden="true"></span>
+          <div class="main" data-clip><Img name="party" alt="Gedeckter Tisch mit vielen asiatischen Gerichten" widths={[560, 900]} sizes="(max-width: 960px) 90vw, 560px" /></div>
+          <div class="stamp" aria-hidden="true">Party<small>Service</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ZOOM -->
+  <section class="zoom" id="zoom" aria-labelledby="zoomH"><div class="zpin" id="zpin">
+    <div class="zpre" aria-hidden="true"><span class="a">Ein Blick</span><span class="b">in den <em>Wok</em></span></div>
+    <div class="ring" aria-hidden="true"></div>
+    <div class="zimg"><Img name="zoom-wok" alt="Koch schwenkt Nudeln im Wok über hohen Flammen" sizes="100vw" /></div>
+    <div class="ztxt"><span class="kicker" style="color:var(--gold)">Am Wok</span><h2 id="zoomH">Große Hitze.<br /><span>Sekunden.</span></h2><p>Gemüse bleibt knackig, Fleisch saftig – weil jedes Gericht erst entsteht, wenn Sie bestellen.</p></div>
+  </div></section>
+
+  <!-- KÜCHEN -->
+  <section class="sec" style="padding-top:60px" aria-labelledby="kuechenH"><div class="wrap">
+    <div class="sec-head"><div><span class="n">02 — Küchen</span><h2 class="d2" id="kuechenH" style="margin-top:14px">Vier Welten,<br /><span class="it">ein Wok.</span></h2></div><p class="muted" style="max-width:380px">Von chinesischen Klassikern über Thai-Currys bis zu Udon – alles frisch aus unserer Küche in {site.city}.</p></div>
+    <div class="stack">
+      {cuisines.map((c, i) => (
+        <article class="scard">
+          <div class="txt">
+            <svg class={`cloud drift${i % 2 ? ' r' : ''}`} aria-hidden="true"><use href={i % 2 ? '#cl-a' : '#cl-b'} /></svg>
+            <span class="idx" aria-hidden="true">{c.n}</span>
+            <div>
+              <span class="kicker" style={`color:${c.kc}`}>{c.k}</span>
+              <h3 class="d1" style="margin-top:18px">{c.title} <span class="it">{c.em}</span></h3>
+              <p class="muted" style="margin-top:18px;max-width:440px">{c.text}</p>
+              <ul>{c.links.map(([t, id]) => <li><a href={`/speisekarte/#${id}`}><span>{t}</span></a></li>)}</ul>
+              <div class="minis" aria-hidden="true">{c.minis.map((m) => <Img name={m} alt="" widths={[200]} sizes="96px" />)}</div>
+            </div>
+          </div>
+          <div class="arch" data-clip><Img name={c.img} alt={`${c.k}: ${c.title} ${c.em}`} sizes="(max-width: 860px) 90vw, 45vw" /></div>
+        </article>
+      ))}
+    </div>
+  </div></section>
+
+  <!-- #2 BURST: Bilder brechen beim Scrollen auf -->
+  <section class="burst" id="burst" aria-labelledby="burstH">
+    <div class="pin" id="burstPin">
+      {burst.map((b) => (
+        <div class="it" style={`--x:${b.x};--y:${b.y};--r:${b.r};--dw:${b.w};--mw:${b.mw};--ar:${b.ar}`} aria-hidden="true"><Img name={b.img} alt="" widths={[400, 700]} sizes="(max-width: 860px) 40vw, 20vw" /></div>
+      ))}
+      <div class="ttl"><div>
+        <span class="kicker" style="color:var(--gold-ink);justify-content:center">05 — Galerie</span>
+        <h2 id="burstH" style="margin-top:18px">Frisch. Bunt.<br /><span>Asiatisch.</span></h2>
+        <p>Ein Querschnitt durch unsere Küche – vom knusprigen Huhn bis zum duftenden Curry.</p>
+        <a class="btn dark" href="/speisekarte/" data-mag><span>Zur Speisekarte</span><span class="ic"><svg><use href="#i-arrow" /></svg></span></a>
+      </div></div>
+      <span class="hint" aria-hidden="true">Weiter scrollen</span>
+    </div>
+  </section>
+
+  <!-- SIGNATURE -->
+  <section class="hscroll" id="signature" aria-labelledby="sigH">
+    <div class="pin">
+      <div class="track" id="track">
+        <div class="intro"><span class="kicker" style="color:var(--gold)">03 — Empfehlungen</span><h2 class="d1" id="sigH" style="margin-top:22px">Die <span class="it">Lieblinge</span> des Hauses.</h2><p class="muted" style="margin-top:22px">Eine kleine Auswahl – die ganze Karte mit {dishCount} Gerichten finden Sie in der Speisekarte.</p></div>
+        {signature.map((s) => (
+          <a class="hcard" href={`/speisekarte/#${s.cat.id}`} data-hover="ZUR KARTE">
+            <span class="no">{s.dish.nr}</span>
+            <div class="plate"><Img name={s.img} alt={s.dish.name} widths={[400, 800]} sizes="(max-width: 860px) 76vw, 400px" /></div>
+            <h3 class="d3">{s.title}</h3>
+            <p>{s.dish.description ?? (s.dish.name !== s.title ? s.dish.name : '')}</p>
+            <div class="row"><span class="kicker" style="color:var(--mist)">{s.cat.name.split(' (')[0]}</span><span class="pr">{euro(s.dish.price)}</span></div>
+          </a>
+        ))}
+        <div style="flex:none;width:20vw" aria-hidden="true"></div>
+      </div>
+      <div class="progress" aria-hidden="true"><i id="prog"></i></div>
+    </div>
+  </section>
+
+  <!-- #1 RAUM-SLIDER -->
+  <section aria-labelledby="spaceH">
+    <div class="space-band">
+      <svg class="cloud drift" style="left:-30px;top:24px" aria-hidden="true"><use href="#cl-a" /></svg>
+      <svg class="cloud drift r" style="right:-30px;bottom:24px;transform:scaleX(-1)" aria-hidden="true"><use href="#cl-b" /></svg>
+      <svg class="swirl dk" style="right:10%;top:-60px;width:520px" aria-hidden="true"><use href="#swirl" /></svg>
+      <div class="wrap grid">
+        <h2 id="spaceH">Unser<span>Restaurant</span></h2>
+        <div class="txt"><p>Warmes Licht, ruhige Farben und der Duft aus der offenen Küche: Bei uns können Sie in Ruhe essen – oder Ihre Bestellung frisch zum Mitnehmen abholen.</p></div>
+      </div>
+    </div>
+    <div class="slider" id="slider" aria-roledescription="Karussell" aria-label="Bilder vom Restaurant – zum Wechseln ziehen" data-hover="ZIEHEN">
+      <div class="track" id="track2">
+        {space.map((s, i) => (
+          <figure class={`slide${i === 0 ? ' on is-cur' : ''}`}>
+            <Img name={s.img} alt={s.alt} sizes="100vw" />
+            <figcaption>{s.cap}</figcaption>
+          </figure>
+        ))}
+        <span class="edge" id="edge" aria-hidden="true"></span>
+      </div>
+      <span class="count" aria-hidden="true"><b id="cnum">01</b> / {String(space.length).padStart(2, '0')}</span>
+      <div class="ctrl"><div class="dots">{space.map((_, i) => <button aria-label={`Bild ${i + 1}`} aria-current={i === 0 ? 'true' : 'false'}></button>)}</div></div>
+      <span class="drag-hint" aria-hidden="true"><svg style="transform:rotate(180deg)"><use href="#i-arrow" /></svg>Ziehen<svg><use href="#i-arrow" /></svg></span>
+      <span class="bar" aria-hidden="true"></span>
+    </div>
+  </section>
+
+  <!-- ZAHLEN -->
+  <section class="on-dark" style="padding:120px 0 40px" aria-label="In Zahlen"><div class="wrap">
+    <div class="nums">
+      <div><b data-count={dishCount}>{dishCount}</b><span class="muted">Gerichte auf der Karte</span></div>
+      <div><b data-count={categories.length}>{categories.length}</b><span class="muted">Kategorien</span></div>
+      <div><b data-count="6">6</b><span class="muted">Tage pro Woche geöffnet</span></div>
+      <div><b data-count={site.delivery.promoFrom}>{site.delivery.promoFrom}</b><span class="muted">€ Bestellwert – Wein gratis</span></div>
+    </div></div>
+    <div class="mq" aria-hidden="true"><div>
+      {[0, 1].map(() => <>
+        <span>China</span><svg><use href="#i-flame" /></svg><span class="s">Thailand</span><svg><use href="#i-flame" /></svg><span>Wok</span><svg><use href="#i-flame" /></svg><span class="s">Udon</span><svg><use href="#i-flame" /></svg>
+      </>)}
+    </div></div>
+  </section>
+
+  <!-- LIEFERUNG & ZEITEN -->
+  <section class="sec" id="info" aria-labelledby="infoH"><div class="wrap">
+    <div class="sec-head"><div><span class="n">04 — Lieferung &amp; Öffnungszeiten</span><h2 class="d2" id="infoH" style="margin-top:14px">Heiß zu Ihnen<br /><span class="it">nach Hause.</span></h2></div>
+      <div class="cluster" aria-hidden="true"><div class="c1" data-par="-0.06"><Img name="party" alt="" widths={[400]} sizes="220px" /></div><div class="c2" data-par="0.08"><Img name="dish-fruehlingsrollen" alt="" widths={[300]} sizes="150px" /></div><div class="c3" data-par="-0.12"><Img name="cat-getraenke" alt="" widths={[240]} sizes="110px" /></div></div></div>
+    <div class="info2">
+      <div class="ticket" data-rv>
+        <div class="main">
+          <svg class="cloud drift" aria-hidden="true"><use href="#cl-a" /></svg>
+          <span class="kicker">Lieferservice &amp; Partyservice</span>
+          <h3 class="d2" style="margin-top:16px">Bestellen per Telefon</h3>
+          <dl>
+            <dt>Liefern</dt><dd>{site.delivery.hours}</dd>
+            <dt>Minimum</dt><dd>{site.delivery.min} € in {site.city}</dd>
+            <dt>Außerhalb</dt><dd>bitte erfragen</dd>
+            <dt>Party</dt><dd>Geburtstag, Firma, Weihnachtsfeier – in Warmhaltebehältern</dd>
+          </dl>
+          <a class="btn dark" href={site.tel} data-mag><span>{site.phone}</span><span class="ic"><svg><use href="#i-phone" /></svg></span></a>
+        </div>
+        <div class="stub"><span class="kicker" style="justify-content:center">ab</span><b>{site.delivery.promoFrom}&nbsp;€</b><span style="font-weight:700">1 Flasche Wein<br />gratis</span></div>
+      </div>
+      <div class="clock" data-rv>
+        <span class="st" id="st"><i></i><span>Jetzt geöffnet</span></span>
+        <h3 class="d3">Öffnungszeiten</h3>
+        <ul class="days" id="days" aria-label="Wochentage"><li class="off" title="Ruhetag">Mo</li><li>Di</li><li>Mi</li><li>Do</li><li>Fr</li><li>Sa</li><li>So</li></ul>
+        <div class="slots">{site.hours.map((h) => <div><small>{h.label}</small>{h.time}</div>)}</div>
+        <p class="muted" style="margin-top:20px;font-size:14px">Montag Ruhetag – an Feiertagen geöffnet.</p>
+      </div>
+    </div>
+    <div class="visit">
+    <div class="visit-img" data-clip><Img name="interior-4" alt="Gastraum mit roten Laternen" widths={[600, 1000]} sizes="(max-width: 960px) 100vw, 45vw" /><span class="tag-b">Willkommen in {site.city}</span></div>
+    <div class="map">
+      <div class="consent">
+        <div class="pin" aria-hidden="true"></div>
+        <h3 class="d3">{site.street}, {site.zip} {site.city}</h3>
+        <small>Beim Laden der Karte werden Daten an Google übertragen. Mehr in der <a href="/datenschutz/" style="text-decoration:underline">Datenschutzerklärung</a>.</small>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+          <button class="btn dark" id="mapLoad" data-src={site.mapsEmbed}><span>Karte laden</span><span class="ic"><svg><use href="#i-pin" /></svg></span></button>
+          <a class="btn ghost" href={site.mapsUrl} target="_blank" rel="noopener">Route planen</a>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div></section>
+</Base>

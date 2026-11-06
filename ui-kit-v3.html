@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>China-Thai-Wok – UI Kit v3 · Wok & Feuer</title>
+<!-- UI-Kit only: production self-hosts fonts (DSGVO) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --jade:#0E2B25; --jade-2:#163A32; --jade-3:#2D5B4F; --mist:#A9C2B8;
+  --gold:#E2A651; --gold-2:#F4CF92; --ember:#E0592A; --chili:#C2412D;
+  --rice:#F4EFE6; --rice-2:#EAE2D4; --white:#FCFAF6; --ink:#141715; --ink-2:#585D58; --line:#D7CDBD;
+  --serif:"Bricolage Grotesque",system-ui,sans-serif; --sans:"Bricolage Grotesque",system-ui,sans-serif; --gold-ink:#A8711F;
+  --ease:cubic-bezier(.16,1,.3,1); --cl-bg:var(--jade);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--rice);color:var(--ink);font:500 17px/1.7 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.lock{overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.wrap{max-width:1400px;margin:0 auto;padding:0 40px}
+@media(max-width:700px){.wrap{padding:0 18px}}
+.grain{position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.07;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ===== Type ===== */
+.mega{font:800 clamp(80px,17vw,280px)/.82 var(--serif);letter-spacing:-.04em}
+.d1{font:700 clamp(48px,7vw,116px)/.95 var(--serif);letter-spacing:-.03em}
+.d2{font:700 clamp(38px,4.6vw,72px)/1 var(--serif);letter-spacing:-.02em}
+.d3{font:700 28px/1.15 var(--serif);letter-spacing:-.01em}
+.it{font-style:normal;color:var(--gold-ink)}
+.on-dark .it,.hero .it,.hscroll .it,.scard:nth-child(3) .it,.foot .it{color:var(--gold)}
+.scard:nth-child(4) .it{color:var(--rice)}
+.kicker{display:inline-flex;align-items:center;gap:14px;font:700 12px/1 var(--sans);letter-spacing:.28em;text-transform:uppercase}
+.kicker::before{content:"";width:28px;height:1.5px;background:currentColor}
+.muted{color:var(--ink-2)}
+.gold{color:var(--gold-ink)}
+.on-dark .gold,.hscroll .gold,.foot .gold{color:var(--gold)}
+
+/* ===== Cursor ===== */
+.cur,.cur-dot{position:fixed;left:0;top:0;pointer-events:none;z-index:200;border-radius:50%;transform:translate(-50%,-50%)}
+.cur{width:40px;height:40px;border:1.5px solid var(--gold);transition:width .4s var(--ease),height .4s var(--ease),background .4s;mix-blend-mode:difference}
+.cur-dot{width:6px;height:6px;background:var(--gold)}
+.cur.big{width:96px;height:96px;background:rgba(226,166,81,.15)}
+.cur span{position:absolute;inset:0;display:grid;place-items:center;font:700 10px/1 var(--sans);letter-spacing:.2em;color:var(--gold);opacity:0;transition:.3s}
+.cur.big span{opacity:1}
+@media(hover:none){.cur,.cur-dot{display:none}}
+
+/* ===== Intro curtain ===== */
+.curtain{position:fixed;inset:0;z-index:150;display:flex;pointer-events:none}
+.curtain i{flex:1;background:var(--jade);transition:transform 1.4s var(--ease) .9s;position:relative;overflow:hidden}
+.curtain i:first-child{border-right:1px solid rgba(226,166,81,.35)}
+.curtain.open i:first-child{transform:translateX(-100%)}
+.curtain.open i:last-child{transform:translateX(100%)}
+.curtain .cmark{position:absolute;inset:0;display:grid;place-items:center;z-index:2;transition:opacity .5s .7s}
+.curtain.open .cmark{opacity:0}
+.cmark div{text-align:center;color:var(--gold)}
+.cmark b{display:block;font:700 44px/1 var(--serif);letter-spacing:-.02em;overflow:hidden}
+.cmark b span{display:inline-block;animation:up 1s var(--ease) both}
+.cmark small{font:700 11px/1 var(--sans);letter-spacing:.4em;opacity:.7}
+@keyframes up{from{transform:translateY(110%)}}
+
+/* ===== Kit nav ===== */
+.kitnav{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:80;display:flex;gap:4px;padding:6px;border-radius:40px;background:rgba(14,43,37,.92);backdrop-filter:blur(10px);max-width:calc(100% - 24px);overflow-x:auto;scrollbar-width:none}
+.kitnav a{flex:none;padding:9px 14px;border-radius:30px;font:600 12px/1 var(--sans);letter-spacing:.06em;color:var(--mist);transition:.3s}
+.kitnav a:hover{background:var(--gold);color:var(--jade)}
+
+/* ===== Header ===== */
+.hdr{position:absolute;top:0;left:0;right:0;z-index:20;color:var(--rice)}
+.hdr .wrap{display:flex;align-items:center;justify-content:space-between;height:96px}
+.brand{display:flex;align-items:center;gap:14px;font:700 22px/1 var(--serif)}
+.brand .slot{width:42px;height:42px;border-radius:50%;border:1.5px dashed rgba(226,166,81,.7);display:grid;place-items:center;font:700 8px/1 var(--sans);letter-spacing:.1em;color:var(--gold)}
+.hdr nav{display:flex;gap:44px;font:600 13px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase}
+.hdr nav a{position:relative;overflow:hidden;display:inline-block;height:14px}
+.hdr nav a span{display:block;transition:transform .6s var(--ease)}
+.hdr nav a span::after{content:attr(data-t);display:block;color:var(--gold)}
+.hdr nav a:hover span{transform:translateY(-50%)}
+.hdr nav a span{line-height:14px}
+.menu-btn{display:none;width:48px;height:48px;border-radius:50%;border:1.5px solid rgba(244,239,230,.4);place-items:center}
+@media(max-width:860px){.hdr nav{display:none}.menu-btn{display:grid}}
+
+/* ===== Buttons ===== */
+.btn{--b:var(--gold);--f:var(--jade);position:relative;display:inline-flex;align-items:center;gap:14px;height:60px;padding:0 10px 0 30px;border-radius:60px;background:var(--b);color:var(--f);font:700 13px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;overflow:hidden;isolation:isolate;transition:transform .5s var(--ease)}
+.btn .ic{width:42px;height:42px;border-radius:50%;background:var(--f);color:var(--b);display:grid;place-items:center;transition:transform .6s var(--ease)}
+.btn .ic svg{width:18px;height:18px}
+.btn:hover .ic{transform:rotate(-45deg)}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--gold-2);border-radius:inherit;transform:scale(0,1);transform-origin:left;transition:transform .7s var(--ease)}
+.btn:hover::before{transform:none}
+.btn.dark{--b:var(--jade);--f:var(--gold-2)} .btn.dark::before{background:var(--jade-3)}
+.btn.ghost{background:transparent;color:currentColor;border:1.5px solid currentColor;padding-right:30px}
+.btn.ghost::before{background:currentColor;opacity:.08}
+.circle-btn{width:150px;height:150px;border-radius:50%;display:grid;place-items:center;position:relative;color:var(--gold);transition:transform .6s var(--ease)}
+.circle-btn svg.ring-t{position:absolute;inset:0;width:100%;height:100%;animation:spin 18s linear infinite}
+.circle-btn .core{width:64px;height:64px;border-radius:50%;background:var(--gold);color:var(--jade);display:grid;place-items:center;transition:transform .6s var(--ease)}
+.circle-btn:hover .core{transform:scale(1.18)}
+.circle-btn .core svg{width:22px;height:22px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== Placeholders ===== */
+.ph{position:relative;overflow:hidden;background:
+  radial-gradient(38% 30% at 42% 46%,rgba(255,220,160,.95),transparent 70%),
+  radial-gradient(24% 20% at 60% 58%,rgba(214,86,40,.9),transparent 70%),
+  radial-gradient(30% 26% at 36% 64%,rgba(90,140,80,.8),transparent 70%),
+  radial-gradient(60% 60% at 50% 55%,#6b3a20,#24130c 80%)}
+.ph.b{background:radial-gradient(30% 24% at 50% 48%,rgba(255,236,190,.95),transparent 70%),radial-gradient(40% 30% at 44% 60%,rgba(226,166,81,.9),transparent 70%),radial-gradient(70% 70% at 50% 50%,#8a4a22,#1e120b 85%)}
+.ph.c{background:radial-gradient(30% 24% at 46% 50%,rgba(240,230,190,.9),transparent 70%),radial-gradient(36% 30% at 56% 58%,rgba(120,170,110,.9),transparent 70%),radial-gradient(70% 70% at 50% 50%,#2f5a48,#0b1a15 85%)}
+.ph.d{background:radial-gradient(40% 30% at 50% 80%,rgba(255,170,80,1),transparent 70%),radial-gradient(60% 50% at 50% 90%,rgba(224,89,42,.9),transparent 70%),radial-gradient(90% 90% at 50% 60%,#2a1610,#0a0807 85%)}
+.ph.e{background:radial-gradient(34% 26% at 50% 50%,rgba(250,240,220,.95),transparent 70%),radial-gradient(40% 36% at 50% 56%,rgba(200,120,70,.85),transparent 70%),radial-gradient(70% 70% at 50% 50%,#5b4030,#120c09 85%)}
+.ph[data-ph]::after{content:attr(data-ph);position:absolute;left:50%;bottom:14px;transform:translateX(-50%);font:700 9px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.7);white-space:nowrap}
+
+/* ===== Clouds (inline styles + vars: works inside <use>) ===== */
+.cloud{display:block;overflow:visible;color:var(--gold)}
+.drift{animation:drift 16s ease-in-out infinite alternate}
+.drift.r{animation-duration:21s;animation-direction:alternate-reverse}
+@keyframes drift{from{transform:translateX(-18px)}to{transform:translateX(18px)}}
+
+/* ===== HERO ===== */
+.hero{position:relative;min-height:100vh;background:var(--jade);color:var(--rice);overflow:hidden;display:flex;flex-direction:column}
+.hero .body{flex:1;display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:center;padding-top:120px;padding-bottom:40px;position:relative;z-index:4}
+.hero h1{font:800 clamp(64px,9.6vw,168px)/.86 var(--serif);letter-spacing:-.05em}
+.hero h1 .gold{color:var(--gold)}
+.hero h1 .disc{display:inline-block;width:.74em;height:.74em;border-radius:50%;vertical-align:-.02em;margin:0 .02em;overflow:hidden;position:relative;box-shadow:0 0 0 .05em var(--jade),0 0 0 .065em var(--gold)}
+.hero h1 .disc .ph{position:absolute;inset:0;animation:spin 14s linear infinite}
+.hero .lead{max-width:480px;margin-top:36px;font-size:19px;color:rgba(244,239,230,.82)}
+.hero .ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
+.hero .gatebox{position:relative;justify-self:center;width:min(34vw,480px);aspect-ratio:1}
+.hero .gate{position:absolute;inset:0;border-radius:50%;overflow:hidden;box-shadow:0 0 0 1.5px var(--gold),0 0 0 18px var(--jade),0 0 0 19.5px rgba(226,166,81,.4)}
+.hero .gate .ph{position:absolute;inset:-8%;transition:transform 1.2s var(--ease)}
+.hero .ring-text{position:absolute;inset:-22%;width:144%;height:144%;color:var(--gold);animation:spin 40s linear infinite;pointer-events:none}
+.hero .ring-text text{font:700 12px var(--sans);letter-spacing:.4em;text-transform:uppercase;fill:currentColor}
+.hero .badge{position:absolute;left:-8%;bottom:4%;z-index:3;width:126px;height:126px;border-radius:50%;background:var(--ember);color:#fff;display:grid;place-content:center;text-align:center;transform:rotate(-10deg);box-shadow:0 20px 40px -14px rgba(0,0,0,.5)}
+.hero .badge b{font:800 34px/1 var(--serif);letter-spacing:-.03em}
+.hero .badge span{font:700 11px/1.3 var(--sans);letter-spacing:.06em}
+.hero .steam{position:absolute;left:50%;top:-20%;width:110px;transform:translateX(-50%);color:rgba(244,239,230,.7);z-index:3}
+.steam path{animation:rise 7s ease-in-out infinite;opacity:0}
+.steam path:nth-child(2){animation-delay:2.3s}.steam path:nth-child(3){animation-delay:4.6s}
+@keyframes rise{0%{transform:translateY(24px);opacity:0}30%{opacity:.8}100%{transform:translateY(-34px);opacity:0}}
+.hero .bar{position:relative;z-index:4;border-top:1px solid rgba(226,166,81,.28)}
+.hero .bar .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;padding-top:22px;padding-bottom:26px;font:700 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--mist)}
+.hero .bar b{color:var(--gold);font-weight:700}
+.hero .cl1{position:absolute;left:-40px;top:16%;width:300px;z-index:2;opacity:.9}
+.hero .cl2{position:absolute;right:-30px;bottom:16%;width:240px;z-index:2;opacity:.9}
+.hero .rl{overflow:hidden;display:block;padding-bottom:.04em}
+.hero .rl>span{display:inline-block;transform:translateY(105%);transition:transform 1.4s var(--ease)}
+.ready .hero .rl>span{transform:none}
+.ready .hero .rl:nth-child(2)>span{transition-delay:.1s}
+.ready .hero .rl:nth-child(3)>span{transition-delay:.2s}
+@media(max-width:900px){.hero .body{grid-template-columns:1fr;padding-top:110px}.hero .gatebox{width:70vw;order:-1;margin:30px auto 10px}.hero .badge{width:96px;height:96px}.hero .badge b{font-size:26px}.hero .cl2{display:none}}
+
+/* ===== Gate zoom (scroll) ===== */
+.zoom{height:240vh;background:var(--rice);position:relative}
+.zoom .zpin{position:sticky;top:0;height:100vh;overflow:hidden;display:grid;place-items:center}
+.zoom .zpre{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 6vw;font:800 clamp(48px,8vw,140px)/.9 var(--serif);letter-spacing:-.05em;color:var(--jade);opacity:var(--po,1);pointer-events:none}
+.zoom .zimg{position:absolute;inset:0;clip-path:circle(var(--r,14%) at 50% 50%);will-change:clip-path}
+.zoom .zimg .ph{position:absolute;inset:0;transform:scale(var(--s,1.3))}
+.zoom .zimg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,8,7,.7))}
+.zoom .ztxt{position:relative;z-index:2;text-align:center;color:var(--white);opacity:var(--o,0);transform:translateY(calc((1 - var(--o,0)) * 40px))}
+.zoom .ztxt h2{font:800 clamp(56px,9vw,160px)/.88 var(--serif);letter-spacing:-.05em;margin:18px 0 22px}
+.zoom .ztxt h2 span{color:var(--gold)}
+.zoom .ztxt p{max-width:520px;margin:0 auto;color:rgba(255,255,255,.85)}
+.zoom .ring{position:absolute;width:30vmin;aspect-ratio:1;border-radius:50%;border:1.5px solid var(--gold);opacity:var(--po,1);transform:scale(1.12)}
+
+/* ===== Sections common ===== */
+.sec{padding:160px 0;position:relative}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-bottom:80px;flex-wrap:wrap}
+.sec-head .n{font:700 15px/1 var(--sans);letter-spacing:.06em;color:var(--gold-ink)}
+.on-dark{background:var(--jade);color:var(--rice);--cl-bg:var(--jade)}
+.on-dark .muted{color:rgba(244,239,230,.62)}
+[data-rv]{opacity:0;transform:translateY(50px);transition:opacity 1.2s var(--ease),transform 1.2s var(--ease)}
+[data-rv].in{opacity:1;transform:none}
+[data-clip]{clip-path:inset(100% 0 0 0);transition:clip-path 1.6s var(--ease)}
+[data-clip].in{clip-path:inset(0)}
+[data-clip] .ph{transform:scale(1.25);transition:transform 2s var(--ease)}
+[data-clip].in .ph{transform:scale(1)}
+
+/* ===== Tokens ===== */
+.tokens{display:grid;grid-template-columns:1.2fr 1fr;gap:64px}
+.palette{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:220px 120px 120px;gap:10px}
+.palette div{padding:18px;display:flex;flex-direction:column;justify-content:flex-end;font:600 12px/1.5 var(--sans);border-radius:6px}
+.palette b{font:700 22px/1 var(--serif);margin-bottom:4px;font-weight:700}
+.typespec>div{padding:22px 0;border-bottom:1px solid var(--line)}
+.typespec small{display:block;font:600 11px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2);margin-bottom:10px}
+@media(max-width:960px){.tokens{grid-template-columns:1fr}}
+
+/* ===== Statement (words light up) ===== */
+.statement{background:var(--rice);padding:200px 0}
+.statement p{font:800 clamp(32px,4.6vw,72px)/1.12 var(--serif);letter-spacing:-.02em;max-width:1200px}
+.statement .w{opacity:.14;transition:opacity .3s}
+.statement .w.on{opacity:1}
+.statement .w.g{color:var(--gold-ink)}
+.statement .inl{display:inline-block;width:1.6em;height:.8em;border-radius:1em;vertical-align:-.04em;overflow:hidden;margin:0 .1em}
+.statement .inl .ph{width:100%;height:100%}
+
+/* ===== Cuisine stack ===== */
+.stack{position:relative}
+.scard{position:sticky;top:90px;height:78vh;min-height:560px;margin-bottom:6vh;border-radius:16px;overflow:hidden;display:grid;grid-template-columns:1.1fr 1fr;background:var(--white);box-shadow:0 -20px 60px -30px rgba(14,43,37,.4);--cl-bg:var(--white)}
+.scard:nth-child(2){top:110px;background:var(--rice-2);--cl-bg:var(--rice-2)}
+.scard:nth-child(3){top:130px;background:var(--jade);color:var(--rice);--cl-bg:var(--jade)}
+.scard:nth-child(4){top:150px;background:var(--gold);color:var(--jade);--cl-bg:var(--gold)}
+.scard .txt{padding:64px;display:flex;flex-direction:column;justify-content:space-between;position:relative}
+.scard .idx{font:800 160px/.8 var(--serif);opacity:.12;letter-spacing:-.05em}
+.scard .arch{margin:40px 40px 40px 0;border-radius:400px 400px 12px 12px;overflow:hidden;position:relative}
+.scard .arch .ph{position:absolute;inset:0}
+.scard ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.scard li{padding:8px 14px;border:1px solid currentColor;border-radius:30px;font:600 12px/1 var(--sans);letter-spacing:.06em;opacity:.75}
+.scard .cloud{position:absolute;right:20px;top:40px;width:180px}
+.scard:nth-child(4) .cloud{color:var(--jade)}
+@media(max-width:860px){.scard{grid-template-columns:1fr;height:auto;min-height:0;position:relative;top:0!important}.scard .arch{margin:0 24px 24px;height:340px}.scard .txt{padding:32px 24px}.scard .idx{font-size:90px}}
+
+/* ===== Horizontal scroll ===== */
+.hscroll{height:340vh;background:var(--jade);color:var(--rice);--cl-bg:var(--jade)}
+.hscroll .pin{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;justify-content:center}
+.hscroll .track{display:flex;gap:48px;padding:0 40px;will-change:transform;align-items:center}
+.hscroll .intro{flex:none;width:min(520px,80vw);padding-right:40px}
+.hcard{flex:none;width:min(420px,78vw);position:relative}
+.hcard .plate{aspect-ratio:1;border-radius:50%;overflow:hidden;position:relative;box-shadow:0 0 0 1.5px rgba(226,166,81,.5),0 0 0 14px var(--jade),0 0 0 15px rgba(226,166,81,.25)}
+.hcard .plate .ph{position:absolute;inset:0;transition:transform 1.2s var(--ease)}
+.hcard:hover .plate .ph{transform:scale(1.08) rotate(8deg)}
+.hcard .no{position:absolute;top:-10px;right:0;z-index:2;min-width:74px;height:74px;padding:0 12px;border-radius:40px;background:var(--gold);color:var(--jade);display:grid;place-items:center;font:800 26px/1 var(--serif)}
+.hcard h3{margin-top:34px}
+.hcard .row{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px;padding-top:14px;border-top:1px solid rgba(226,166,81,.3)}
+.hcard .pr{font:700 26px/1 var(--serif);color:var(--gold)}
+.hcard:nth-child(odd){margin-top:120px}
+.hscroll .progress{position:absolute;left:40px;right:40px;bottom:48px;height:1px;background:rgba(226,166,81,.25)}
+.hscroll .progress i{display:block;height:100%;width:0;background:var(--gold)}
+@media(max-width:860px){.hscroll{height:auto}.hscroll .pin{position:relative;height:auto;padding:100px 0;overflow-x:auto}.hscroll .track{transform:none!important}.hcard:nth-child(odd){margin-top:0}.hscroll .progress{display:none}}
+
+/* ===== Menu (hover preview) ===== */
+.cats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:56px}
+.chip{height:44px;padding:0 20px;border-radius:30px;border:1.5px solid var(--line);font:600 13px/1 var(--sans);letter-spacing:.04em;transition:.4s var(--ease);display:inline-flex;align-items:center;gap:8px}
+.chip sup{font-size:10px;color:var(--ink-2)}
+.chip:hover{border-color:var(--jade)}
+.chip.on{background:var(--jade);border-color:var(--jade);color:var(--gold-2)}
+.chip.on sup{color:var(--mist)}
+.tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:-30px 0 40px}
+.tgl{height:40px;padding:0 16px;border-radius:30px;background:var(--rice-2);font:600 13px/1 var(--sans);display:inline-flex;align-items:center;gap:8px;transition:.3s}
+.tgl svg{width:15px;height:15px}
+.tgl.on.v{background:var(--jade-3);color:#fff}.tgl.on.h{background:var(--chili);color:#fff}
+.srch{margin-left:auto;display:flex;align-items:center;gap:10px;border-bottom:1.5px solid var(--ink);height:42px;min-width:260px}
+.srch input{border:0;background:none;outline:none;font:inherit;font-size:15px;flex:1}
+.mcat{display:grid;grid-template-columns:320px 1fr;gap:64px;padding:56px 0;border-top:1.5px solid var(--ink)}
+.mcat .side{position:sticky;top:40px;align-self:start}
+.mcat .side .big{font:800 120px/.8 var(--serif);color:var(--gold);letter-spacing:-.05em}
+.dish{display:grid;grid-template-columns:64px 1fr auto;gap:6px 18px;align-items:baseline;padding:22px 0;border-bottom:1px solid var(--line);position:relative;transition:padding .5s var(--ease)}
+.dish:hover{padding-left:16px}
+.dish::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);transform:scaleY(0);transition:transform .5s var(--ease)}
+.dish:hover::before{transform:none}
+.dish .no{font:800 15px/1 var(--serif);color:var(--gold-ink)}
+.dish h4{font:700 23px/1.2 var(--serif);letter-spacing:-.01em}
+.dish .pr{font:700 22px/1 var(--serif);font-variant-numeric:lining-nums}
+.dish p{grid-column:2/4;font-size:14px;color:var(--ink-2)}
+.dish .tags{grid-column:2/4;display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.dish.out{opacity:.4}.dish.out h4{text-decoration:line-through}
+.tg{height:24px;padding:0 10px;border-radius:20px;font:700 11px/24px var(--sans);letter-spacing:.04em;background:var(--rice-2);color:var(--ink-2);display:inline-flex;gap:5px;align-items:center}
+.tg svg{width:12px;height:12px}
+.tg.v{background:rgba(45,91,79,.14);color:var(--jade-3)}.tg.h{background:rgba(194,65,45,.12);color:var(--chili)}.tg.s{background:var(--gold);color:var(--jade)}.tg.o{background:var(--ink);color:var(--white)}
+.cd{width:22px;height:22px;border-radius:5px;border:1px solid var(--line);font:700 11px/20px var(--sans);text-align:center;color:var(--ink-2);background:var(--white)}
+.preview{position:fixed;left:0;top:0;width:260px;height:260px;border-radius:50%;overflow:hidden;pointer-events:none;z-index:70;transform:translate(-50%,-50%) scale(0);transition:transform .5s var(--ease);box-shadow:0 0 0 6px var(--rice),0 0 0 7.5px var(--gold)}
+.preview.show{transform:translate(-50%,-50%) scale(1)}
+.preview .ph{position:absolute;inset:0}
+@media(max-width:860px){.mcat{grid-template-columns:1fr;gap:20px}.mcat .side{position:relative;top:0}.mcat .side .big{font-size:72px}.srch{margin-left:0;min-width:0;flex:1}.preview{display:none}}
+
+/* ===== Numbers + marquee ===== */
+.nums{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(226,166,81,.3);border-bottom:1px solid rgba(226,166,81,.3)}
+.nums div{padding:56px 32px;border-right:1px solid rgba(226,166,81,.3)}
+.nums div:last-child{border:0}
+.nums b{display:block;font:800 clamp(56px,6vw,96px)/1 var(--serif);color:var(--gold);letter-spacing:-.03em}
+@media(max-width:860px){.nums{grid-template-columns:1fr 1fr}.nums div:nth-child(2){border-right:0}.nums div{border-bottom:1px solid rgba(226,166,81,.3)}}
+.mq{overflow:hidden;padding:40px 0;white-space:nowrap}
+.mq div{display:inline-flex;gap:60px;align-items:center;animation:mq 30s linear infinite;font:800 clamp(56px,9vw,140px)/1 var(--serif);letter-spacing:-.03em}
+.mq .o{color:var(--rice)}
+.mq .s{color:var(--gold)}
+.mq svg{width:60px;height:60px;color:var(--ember)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ===== Ticket (delivery) & hours ===== */
+.info2{display:grid;grid-template-columns:1.3fr 1fr;gap:32px;align-items:stretch}
+.ticket{display:grid;grid-template-columns:1fr 200px;background:var(--gold);color:var(--jade);border-radius:18px;position:relative;--cl-bg:var(--gold);overflow:hidden}
+.ticket .main{padding:52px;position:relative}
+.ticket .stub{border-left:2px dashed rgba(14,43,37,.35);padding:40px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px}
+.ticket .stub b{font:800 76px/1 var(--serif);letter-spacing:-.04em}
+.ticket::before,.ticket::after{content:"";position:absolute;right:186px;width:28px;height:28px;border-radius:50%;background:var(--rice)}
+.ticket::before{top:-14px}.ticket::after{bottom:-14px}
+.ticket dl{display:grid;grid-template-columns:auto 1fr;gap:12px 28px;margin:28px 0 36px;font-size:15px}
+.ticket dt{font:700 11px/22px var(--sans);letter-spacing:.2em;text-transform:uppercase;opacity:.65}
+.ticket dd{font-weight:700}
+.ticket .cloud{position:absolute;right:20px;top:24px;width:160px;color:var(--jade)}
+.clock{background:var(--jade);color:var(--rice);border-radius:18px;padding:48px;position:relative;overflow:hidden}
+.clock .st{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border-radius:30px;background:rgba(169,194,184,.12);font:700 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--mist)}
+.clock .st i{width:9px;height:9px;border-radius:50%;background:#7ED3A6;box-shadow:0 0 0 0 rgba(126,211,166,.6);animation:pulse 2s infinite}
+.clock .st.closed i{background:var(--ember);animation:none}
+@keyframes pulse{70%{box-shadow:0 0 0 12px rgba(126,211,166,0)}}
+.clock .days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:30px 0 22px}
+.clock .days span{aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font:700 12px/1 var(--sans);border:1px solid rgba(226,166,81,.3);color:var(--mist)}
+.clock .days span.off{opacity:.35;text-decoration:line-through}
+.clock .days span.now{background:var(--gold);color:var(--jade);border-color:var(--gold)}
+.clock .slots{display:grid;gap:10px}
+.clock .slots div{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(226,166,81,.2);font:700 26px/1 var(--serif)}
+.clock .slots small{font:600 12px/26px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--mist)}
+@media(max-width:960px){.info2{grid-template-columns:1fr}.ticket{grid-template-columns:1fr}.ticket .stub{border-left:0;border-top:2px dashed rgba(14,43,37,.35)}.ticket::before,.ticket::after{display:none}.ticket .main,.clock{padding:30px}}
+
+/* ===== Components board ===== */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.tile{background:var(--white);border-radius:14px;padding:32px;min-height:240px;display:flex;flex-direction:column;justify-content:space-between;gap:20px;position:relative;overflow:hidden;--cl-bg:var(--white)}
+.tile.dk{background:var(--jade);color:var(--rice);--cl-bg:var(--jade)}
+.tile small{font:700 11px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-2)}
+.tile.dk small{color:var(--mist)}
+.tile .center{flex:1;display:grid;place-items:center}
+@media(max-width:960px){.board{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.field label{font:700 11px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--mist)}
+.field input{height:54px;border-radius:12px;border:1.5px solid rgba(226,166,81,.3);background:rgba(255,255,255,.04);color:var(--rice);padding:0 18px;font:inherit;outline:none;transition:border-color .3s}
+.field input:focus{border-color:var(--gold)}
+.notice{display:flex;align-items:center;gap:16px;justify-content:center;background:var(--ember);color:var(--white);padding:12px 20px;font:600 14px/1.4 var(--sans)}
+.notice b{font:700 10px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;border:1px solid rgba(255,255,255,.6);padding:5px 8px;border-radius:20px}
+
+/* ===== Footer ===== */
+.foot{background:var(--jade);color:var(--rice);padding:140px 0 40px;position:relative;overflow:hidden;--cl-bg:var(--jade)}
+.foot .cta{display:flex;justify-content:space-between;align-items:center;gap:40px;flex-wrap:wrap}
+.foot .tel{font:800 clamp(44px,7vw,120px)/1 var(--serif);letter-spacing:-.03em;color:var(--gold);transition:letter-spacing .8s var(--ease)}
+.foot .tel:hover{letter-spacing:0}
+.foot .cols{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin:100px 0 0;padding:48px 0;border-top:1px solid rgba(226,166,81,.3)}
+.foot h5{font:700 11px/1 var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.foot p{color:rgba(244,239,230,.75);font-size:15px}
+.foot .word{font:800 clamp(56px,13vw,220px)/.85 var(--serif);letter-spacing:-.05em;color:var(--jade-2);white-space:nowrap;margin-top:40px;text-align:center}
+.foot .bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--mist);padding-top:30px}
+.foot .cl{position:absolute;width:280px}
+@media(max-width:860px){.foot .cols{grid-template-columns:1fr}}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}[data-rv],[data-clip]{opacity:1;transform:none;clip-path:none}}
+</style>
+</head>
+<body class="lock">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><path id="c2" d="M75 75m-62 0a62 62 0 1 1 124 0a62 62 0 1 1-124 0"/></defs>
+  <!-- Wolke: Doppelkontur. Außen currentColor, innen var(--cl-bg). Inline-Styles → funktioniert in <use>. -->
+  <symbol id="cl-a" viewBox="-10 -10 320 140" overflow="visible">
+    <g style="fill:none;stroke-linecap:round;stroke-linejoin:round">
+      <path style="stroke:currentColor;stroke-width:9" d="M0 10H170A22 22 0 0 1 170 54H110A22 22 0 0 0 110 98H300M150 10A22 22 0 0 1 150 54"/>
+      <path style="stroke:var(--cl-bg);stroke-width:6" d="M0 10H170A22 22 0 0 1 170 54H110A22 22 0 0 0 110 98H300M150 10A22 22 0 0 1 150 54"/>
+    </g>
+  </symbol>
+  <symbol id="cl-b" viewBox="-10 -10 260 120" overflow="visible">
+    <g style="fill:none;stroke-linecap:round;stroke-linejoin:round">
+      <path style="stroke:currentColor;stroke-width:9" d="M240 10H70A20 20 0 0 0 70 50H180A20 20 0 0 1 180 90H0M30 90A20 20 0 0 1 30 50"/>
+      <path style="stroke:var(--cl-bg);stroke-width:6" d="M240 10H70A20 20 0 0 0 70 50H180A20 20 0 0 1 180 90H0M30 90A20 20 0 0 1 30 50"/>
+    </g>
+  </symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path style="fill:none;stroke:currentColor;stroke-width:1.8" d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path style="fill:none;stroke:currentColor;stroke-width:1.6" d="M5 3h3l2 5-2.5 1.5a11 11 0 0 0 7 7L16 14l5 2v3a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2Z"/></symbol>
+  <symbol id="i-chili" viewBox="0 0 24 24"><path style="fill:none;stroke:currentColor;stroke-width:1.8" d="M14 6c3 0 6 2 6 6 0 5-6 9-13 9 4-2 6-6 6-10 0-3 0-5 1-5Zm0 0c0-2 1-3 3-3"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path style="fill:none;stroke:currentColor;stroke-width:1.8" d="M5 19C5 10 10 5 20 4c0 10-5 15-14 15Zm0 0 8-8"/></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24"><path style="fill:currentColor" d="M12 2c1 4 6 6 6 12a6 6 0 0 1-12 0c0-3 2-5 3-6 0 2 1 4 3 4 0-5-2-7 0-10Z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><path style="fill:none;stroke:currentColor;stroke-width:1.8" d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm9 16-4-4"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path style="fill:none;stroke:currentColor;stroke-width:1.8" d="M4 9h16M4 15h10"/></symbol>
+</svg>
+
+<div class="grain"></div>
+<div class="cur"><span>ANSEHEN</span></div><div class="cur-dot"></div>
+<div class="preview" id="preview"><div class="ph" id="previewPh"></div></div>
+
+<!-- Intro: Tür öffnet sich -->
+<div class="curtain" id="curtain">
+  <i></i><i></i>
+  <div class="cmark"><div><b><span>China-Thai-Wok</span></b><small>SCHMALKALDEN</small></div></div>
+</div>
+
+<nav class="kitnav">
+  <a href="#hero">Hero</a><a href="#zoom">Zoom</a><a href="#tokens">Tokens</a><a href="#statement">Statement</a><a href="#welten">Küchen</a><a href="#signature">Signature</a><a href="#karte">Speisekarte</a><a href="#zahlen">Zahlen</a><a href="#info">Liefern &amp; Zeiten</a><a href="#bausteine">Bausteine</a><a href="#footer">Footer</a>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="hero">
+  <div class="hdr"><div class="wrap">
+    <a class="brand" href="#"><span class="slot">LOGO</span>China-Thai-Wok</a>
+    <nav><a href="#"><span data-t="Startseite">Startseite</span></a><a href="#karte"><span data-t="Speisekarte">Speisekarte</span></a></nav>
+    <a class="btn" href="tel:03683400505" data-mag><span>03683 400505</span><span class="ic"><svg><use href="#i-phone"/></svg></span></a>
+    <button class="menu-btn" aria-label="Menü"><svg width="20" height="20"><use href="#i-menu"/></svg></button>
+  </div></div>
+
+  <svg class="cloud cl1 drift"><use href="#cl-a"/></svg>
+  <svg class="cloud cl2 drift r"><use href="#cl-b"/></svg>
+  <div class="wrap body">
+    <div>
+      <span class="kicker" style="color:var(--gold)">Schmalkalden · China · Thai · Wok</span>
+      <h1 style="margin-top:26px">
+        <span class="rl"><span>Asiatisch.</span></span>
+        <span class="rl"><span>Frisch aus</span></span>
+        <span class="rl"><span>dem <span class="gold">W<span class="disc"><span class="ph d"></span></span>k.</span></span></span>
+      </h1>
+      <p class="lead">Chinesische und thailändische Küche – bei großer Hitze, in Sekunden, immer frisch zubereitet. Zum Mitnehmen oder geliefert.</p>
+      <div class="ctas">
+        <a class="btn" href="#karte" data-mag><span>Speisekarte</span><span class="ic"><svg><use href="#i-arrow"/></svg></span></a>
+        <a class="btn ghost" href="tel:03683400505" data-mag style="color:var(--rice)">03683 400505</a>
+      </div>
+    </div>
+    <div class="gatebox">
+      <svg class="steam" viewBox="0 0 100 120" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M30 110C20 85 45 75 32 50S40 15 30 5"/><path d="M52 110C42 85 67 75 54 50S62 15 52 5"/><path d="M74 110C64 85 89 75 76 50S84 15 74 5"/></svg>
+      <svg class="ring-text" viewBox="0 0 400 400" aria-hidden="true">
+        <defs><path id="circ" d="M200 200m-176 0a176 176 0 1 1 352 0a176 176 0 1 1-352 0"/></defs>
+        <text><textPath href="#circ">Immer frisch zubereitet · Aus dem Wok · China · Thailand · Udon ·</textPath></text>
+      </svg>
+      <div class="gate" id="gate" data-hover="WOK"><div class="ph d" data-ph="Video · Wok in Flammen"></div></div>
+      <div class="badge"><b>143</b><span>Gerichte<br>frisch</span></div>
+    </div>
+  </div>
+  <div class="bar"><div class="wrap"><span>Di – So <b>10:30 – 15:00 · 17:00 – 21:30</b></span><span>Lieferung ab <b>35 €</b></span><span>Renthofstr. 8 · Schmalkalden</span></div></div>
+</header>
+<div class="notice"><b>Hinweis</b>Betriebsurlaub 20.–27.12. – vom Admin aus ein- und ausblendbar.</div>
+
+<!-- ================= TOKENS ================= -->
+<section class="sec" id="tokens"><div class="wrap">
+  <div class="sec-head"><div><span class="n">01 — Tokens</span><h2 class="d2" style="margin-top:14px">Jade, Gold &amp; <span class="it gold">Glut.</span></h2></div><p class="muted" style="max-width:420px">Zwei Hauptfarben wie gewohnt – neu ist „Glut“ (Ember) als einziger warmer Funke: nur für Hinweise &amp; Feuer-Momente. Eine einzige Schrift: Bricolage Grotesque – kräftig, gleichmäßig, sehr gut lesbar, mit Charakter.</p></div>
+  <div class="tokens">
+    <div class="palette">
+      <div style="grid-row:span 2;background:var(--jade);color:var(--gold-2)"><b>Jade</b>#0E2B25 · Hauptfläche</div>
+      <div style="background:var(--gold);color:var(--jade)"><b>Gold</b>#E2A651</div>
+      <div style="background:var(--ember);color:#fff"><b>Glut</b>#E0592A</div>
+      <div style="background:var(--jade-3);color:#fff"><b>Jade 3</b>#2D5B4F</div>
+      <div style="background:var(--gold-2);color:var(--jade)"><b>Gold 2</b>#F4CF92</div>
+      <div style="background:var(--white);color:var(--ink);border:1px solid var(--line)"><b>Reis</b>#F4EFE6</div>
+      <div style="grid-column:span 2;background:var(--ink);color:var(--rice)"><b>Tinte</b>#141715 · Text</div>
+    </div>
+    <div class="typespec">
+      <div><small>Mega · Bricolage Grotesque 800</small><div style="font:800 96px/.9 var(--serif);letter-spacing:-.045em">Wok.</div></div>
+      <div><small>Display · 700 + Gold-Akzent</small><div class="d2">Frisch, <span class="it gold">heiß</span>, schnell.</div></div>
+      <div><small>Gericht · 700 · 24px</small><div style="font:700 24px/1.2 var(--serif)">Knusprige Ente mit Mangosoße</div></div>
+      <div><small>Kicker · 700 · .28em</small><span class="kicker">Unsere Küche</span></div>
+      <div><small>Text · 500 · 17px</small><p class="muted">Gemüse, Soße, Hühnerfleisch – ä ö ü ß, sauber gesetzt.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ================= STATEMENT ================= -->
+<section class="statement" id="statement"><div class="wrap">
+  <span class="kicker muted" style="margin-bottom:40px;display:inline-flex">02 — Philosophie</span>
+  <p id="stmt">Wir kochen, wie man in Asien kocht: <span class="inl"><span class="ph d" style="display:block"></span></span> große Flamme, <em>frische Zutaten,</em> keine Abkürzungen. Von Kanton bis Bangkok <span class="inl"><span class="ph c" style="display:block"></span></span> – jedes Gericht entsteht erst, <em>wenn Sie bestellen.</em></p>
+</div></section>
+
+<!-- ================= GATE ZOOM ================= -->
+<section class="zoom" id="zoom"><div class="zpin" id="zpin">
+  <div class="zpre"><span>Ein Blick</span><span>in den Wok</span></div>
+  <div class="ring"></div>
+  <div class="zimg"><div class="ph d" data-ph="Video · Koch am Wok, Flammen"></div></div>
+  <div class="ztxt"><span class="kicker" style="color:var(--gold)">Am Wok</span><h2>Große Hitze.<br><span>Sekunden.</span></h2><p>Gemüse bleibt knackig, Fleisch saftig – weil jedes Gericht erst entsteht, wenn Sie bestellen.</p></div>
+</div></section>
+
+<!-- ================= KÜCHEN (Stack) ================= -->
+<section class="sec" id="welten" style="padding-top:40px"><div class="wrap">
+  <div class="sec-head"><div><span class="n">03 — Küchen</span><h2 class="d2" style="margin-top:14px">Vier Welten,<br><span class="it gold">ein Wok.</span></h2></div><p class="muted" style="max-width:380px">Karten stapeln sich beim Scrollen übereinander. Bildrahmen als Bogen – das Mondtor, ein Motiv aus ganz Asien.</p></div>
+  <div class="stack">
+    <article class="scard"><div class="txt"><svg class="cloud drift"><use href="#cl-b"/></svg><span class="idx">01</span><div><span class="kicker" style="color:var(--gold)">China</span><h3 class="d1" style="margin-top:18px">Kantonesische <span class="it">Klassiker</span></h3><p class="muted" style="margin-top:18px;max-width:420px">Knusprige Ente, Huhn süß-sauer, gebratener Reis – die Gerichte, für die man wiederkommt.</p><ul><li>Ente</li><li>Hühnerfleisch</li><li>Großgerichte</li><li>Gebratener Reis</li></ul></div></div><div class="arch" data-clip><div class="ph" data-ph="Foto · China"></div></div></article>
+    <article class="scard"><div class="txt"><svg class="cloud drift"><use href="#cl-a"/></svg><span class="idx">02</span><div><span class="kicker" style="color:var(--jade-3)">Thailand</span><h3 class="d1" style="margin-top:18px">Curry &amp; <span class="it">Zitronengras</span></h3><p class="muted" style="margin-top:18px;max-width:420px">Rotes und grünes Curry, Tom Ka, Pad Thai – duftend, frisch, auf Wunsch scharf.</p><ul><li>Thai-Spezialitäten</li><li>Curry</li><li>Suppen</li></ul></div></div><div class="arch" data-clip><div class="ph c" data-ph="Foto · Thai"></div></div></article>
+    <article class="scard"><div class="txt"><svg class="cloud drift"><use href="#cl-b"/></svg><span class="idx">03</span><div><span class="kicker" style="color:var(--gold)">Wok</span><h3 class="d1" style="margin-top:18px">Große <span class="it gold">Hitze.</span></h3><p class="muted" style="margin-top:18px;max-width:420px">Gebratene Nudeln, Glasnudeln, Meeresfrüchte – in Sekunden über offener Flamme.</p><ul><li>Gebratene Nudeln</li><li>Glasnudeln</li><li>Meeresfrüchte</li></ul></div></div><div class="arch" data-clip><div class="ph d" data-ph="Foto · Wok"></div></div></article>
+    <article class="scard"><div class="txt"><svg class="cloud drift"><use href="#cl-a"/></svg><span class="idx">04</span><div><span class="kicker">Udon</span><h3 class="d1" style="margin-top:18px">Dicke Nudeln, <span class="it">Ihre Soße.</span></h3><p style="margin-top:18px;max-width:420px;opacity:.8">Udon mit Soße nach Wahl – A, B, C oder E.</p><ul><li>Udon</li><li>Extra Soßen</li></ul></div></div><div class="arch" data-clip><div class="ph e" data-ph="Foto · Udon"></div></div></article>
+  </div>
+</div></section>
+
+<!-- ================= SIGNATURE (horizontal) ================= -->
+<section class="hscroll" id="signature">
+  <div class="pin">
+    <div class="track" id="track">
+      <div class="intro"><span class="kicker gold">04 — Empfehlungen</span><h2 class="d1" style="margin-top:22px">Die <span class="it gold">Lieblinge</span> des Hauses.</h2><p class="muted" style="margin-top:22px">Vertikal scrollen – die Teller fahren horizontal vorbei.</p></div>
+      <article class="hcard" data-hover="ANSEHEN"><span class="no">70</span><div class="plate"><div class="ph"></div></div><h3 class="d3">Knusprige Ente</h3><p class="muted">Mangosoße, Gemüse, Reis</p><div class="row"><span class="kicker" style="color:var(--mist)">Ente</span><span class="pr">12,90 €</span></div></article>
+      <article class="hcard" data-hover="ANSEHEN"><span class="no">T1</span><div class="plate"><div class="ph c"></div></div><h3 class="d3">Pad Thai</h3><p class="muted">Reisnudeln, Erdnuss, Limette</p><div class="row"><span class="kicker" style="color:var(--mist)">Thai</span><span class="pr">11,50 €</span></div></article>
+      <article class="hcard" data-hover="ANSEHEN"><span class="no">88</span><div class="plate"><div class="ph b"></div></div><h3 class="d3">Großgericht „Wok“</h3><p class="muted">Huhn, Rind, Garnelen, Gemüse</p><div class="row"><span class="kicker" style="color:var(--mist)">Großgerichte</span><span class="pr">14,90 €</span></div></article>
+      <article class="hcard" data-hover="ANSEHEN"><span class="no">U2</span><div class="plate"><div class="ph e"></div></div><h3 class="d3">Udon mit Rind</h3><p class="muted">Soße nach Wahl</p><div class="row"><span class="kicker" style="color:var(--mist)">Udon</span><span class="pr">12,40 €</span></div></article>
+      <article class="hcard" data-hover="ANSEHEN"><span class="no">61</span><div class="plate"><div class="ph d"></div></div><h3 class="d3">Garnelen Szechuan</h3><p class="muted">scharf, Paprika, Zwiebel</p><div class="row"><span class="kicker" style="color:var(--mist)">Meeresfrüchte</span><span class="pr">13,90 €</span></div></article>
+      <div style="flex:none;width:30vw"></div>
+    </div>
+    <div class="progress"><i id="prog"></i></div>
+  </div>
+</section>
+
+<!-- ================= SPEISEKARTE ================= -->
+<section class="sec" id="karte"><div class="wrap">
+  <div class="sec-head"><div><span class="n">05 — Speisekarte</span><h2 class="d2" style="margin-top:14px">143 Gerichte.<br><span class="it gold">Kein Kompromiss.</span></h2></div><p class="muted" style="max-width:380px">Maus über ein Gericht → runde Bildvorschau folgt dem Cursor. Kategorie-Nummer als großer Kontur-Titel, bleibt beim Scrollen stehen.</p></div>
+  <div class="cats" id="cats">
+    <button class="chip on">Alle <sup>143</sup></button><button class="chip">Vorspeisen <sup>12</sup></button><button class="chip">Reis <sup>9</sup></button><button class="chip">Nudeln <sup>9</sup></button><button class="chip">Glasnudeln <sup>7</sup></button><button class="chip">Vegetarisch <sup>8</sup></button><button class="chip">Huhn <sup>12</sup></button><button class="chip">Schwein <sup>6</sup></button><button class="chip">Rind <sup>6</sup></button><button class="chip">Ente <sup>8</sup></button><button class="chip">Meeresfrüchte <sup>14</sup></button><button class="chip">Großgerichte <sup>10</sup></button><button class="chip">Thai <sup>10</sup></button><button class="chip">Udon <sup>7</sup></button><button class="chip">Getränke <sup>4</sup></button>
+  </div>
+  <div class="tools">
+    <button class="tgl v" id="tV"><svg><use href="#i-leaf"/></svg>Vegetarisch</button>
+    <button class="tgl h" id="tH"><svg><use href="#i-chili"/></svg>Scharf</button>
+    <label class="srch"><svg width="18" height="18"><use href="#i-search"/></svg><input id="q" placeholder="Name oder Nummer…"></label>
+  </div>
+
+  <div class="mcat">
+    <div class="side"><div class="big">10</div><h3 class="d2" style="margin-top:10px">Ente</h3><p class="muted" style="margin-top:12px;font-size:14px">Alle Gerichte mit Reis.<br>Mit gebratenen Nudeln +3,00 €.</p></div>
+    <div id="dishes">
+      <div class="dish" data-v="0" data-h="0" data-ph=""><span class="no">70</span><h4>Knusprige Ente</h4><span class="pr">12,90 €</span><p>mit Mangosoße und Gemüse</p><div class="tags"><span class="tg s"><svg><use href="#i-flame"/></svg>Empfehlung</span><span class="cd">a</span><span class="cd">f</span></div></div>
+      <div class="dish" data-v="0" data-h="1" data-ph="d"><span class="no">71</span><h4>Ente Szechuan</h4><span class="pr">12,50 €</span><p>scharfe Szechuan-Soße, Paprika</p><div class="tags"><span class="tg h"><svg><use href="#i-chili"/></svg>scharf</span><span class="cd">a</span></div></div>
+      <div class="dish" data-v="0" data-h="0" data-ph="b"><span class="no">72</span><h4>Ente mit Erdnusssoße</h4><span class="pr">12,50 €</span><p>Erdnusssoße, Brokkoli, Möhren</p><div class="tags"><span class="cd">e</span></div></div>
+      <div class="dish out" data-v="0" data-h="0" data-ph="e"><span class="no">73</span><h4>Ente Chop Suey</h4><span class="pr">12,20 €</span><p>Sojasprossen und Bambus</p><div class="tags"><span class="tg o">Heute aus</span></div></div>
+      <div class="dish" data-v="1" data-h="1" data-ph="c"><span class="no">T3</span><h4>Rotes Curry mit Tofu</h4><span class="pr">10,20 €</span><p>Kokosmilch, Bambus, Thai-Basilikum</p><div class="tags"><span class="tg v"><svg><use href="#i-leaf"/></svg>vegetarisch</span><span class="tg h"><svg><use href="#i-chili"/></svg>leicht</span></div></div>
+    </div>
+  </div>
+  <p class="muted" style="font-size:13px;margin-top:24px">Gerichte/Preise/Codes in diesem Kit sind Beispiele – final aus menu.json.</p>
+</div></section>
+
+<!-- ================= ZAHLEN + MARQUEE ================= -->
+<section class="on-dark" id="zahlen" style="padding:120px 0 40px"><div class="wrap">
+  <div class="nums">
+    <div><b data-count="143">0</b><span class="muted">Gerichte auf der Karte</span></div>
+    <div><b data-count="18">0</b><span class="muted">Kategorien</span></div>
+    <div><b data-count="6">0</b><span class="muted">Tage pro Woche geöffnet</span></div>
+    <div><b data-count="60">0</b><span class="muted">€ – ab hier: Wein gratis</span></div>
+  </div></div>
+  <div class="mq"><div>
+    <span class="o">China</span><svg><use href="#i-flame"/></svg><span class="s">Thailand</span><svg><use href="#i-flame"/></svg><span class="o">Wok</span><svg><use href="#i-flame"/></svg><span class="s">Udon</span><svg><use href="#i-flame"/></svg>
+    <span class="o">China</span><svg><use href="#i-flame"/></svg><span class="s">Thailand</span><svg><use href="#i-flame"/></svg><span class="o">Wok</span><svg><use href="#i-flame"/></svg><span class="s">Udon</span><svg><use href="#i-flame"/></svg>
+  </div></div>
+</section>
+
+<!-- ================= LIEFERN & ZEITEN ================= -->
+<section class="sec" id="info"><div class="wrap">
+  <div class="sec-head"><div><span class="n">06 — Lieferung &amp; Zeiten</span><h2 class="d2" style="margin-top:14px">Heiß zu Ihnen<br><span class="it gold">nach Hause.</span></h2></div></div>
+  <div class="info2">
+    <div class="ticket" data-rv>
+      <div class="main"><svg class="cloud drift"><use href="#cl-a"/></svg>
+        <span class="kicker">Lieferservice</span>
+        <h3 class="d2" style="margin-top:16px">Bestellen per Telefon</h3>
+        <dl><dt>Liefern</dt><dd>11:00–14:00 · 17:00–21:00</dd><dt>Minimum</dt><dd>35 € in Schmalkalden</dd><dt>Außerhalb</dt><dd>auf Anfrage</dd><dt>Party</dt><dd>Geburtstag, Firma, Weihnachten</dd></dl>
+        <a class="btn dark" href="tel:03683400505" data-mag><span>03683 400505</span><span class="ic"><svg><use href="#i-phone"/></svg></span></a>
+      </div>
+      <div class="stub"><span class="kicker" style="justify-content:center">ab</span><b>60€</b><span style="font-weight:700">1 Flasche Wein<br>gratis</span></div>
+    </div>
+    <div class="clock" data-rv>
+      <span class="st" id="st"><i></i><span>Jetzt geöffnet</span></span>
+      <div class="days" id="days"><span class="off">Mo</span><span>Di</span><span>Mi</span><span>Do</span><span>Fr</span><span>Sa</span><span>So</span></div>
+      <div class="slots"><div><small>Mittag</small>10:30 – 15:00</div><div><small>Abend</small>17:00 – 21:30</div></div>
+      <p class="muted" style="margin-top:20px;font-size:14px">Montag Ruhetag (außer Feiertage) · Renthofstr. 8, 98574 Schmalkalden</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ================= BAUSTEINE ================= -->
+<section class="sec" id="bausteine" style="background:var(--rice-2)"><div class="wrap">
+  <div class="sec-head"><div><span class="n">07 — Bausteine</span><h2 class="d2" style="margin-top:14px">Komponenten</h2></div></div>
+  <div class="board">
+    <div class="tile"><small>Buttons · magnetisch</small><div class="center" style="gap:16px;display:flex;flex-direction:column"><a class="btn" href="#" data-mag><span>Speisekarte</span><span class="ic"><svg><use href="#i-arrow"/></svg></span></a><a class="btn dark" href="#" data-mag><span>Anrufen</span><span class="ic"><svg><use href="#i-phone"/></svg></span></a><a class="btn ghost" href="#">Mehr erfahren</a></div></div>
+    <div class="tile dk"><small>Rund-Button · rotierender Text</small><div class="center"><a href="#" class="circle-btn" data-mag><svg class="ring-t" viewBox="0 0 150 150"><text style="font:700 10.5px var(--sans);letter-spacing:.32em;fill:currentColor"><textPath href="#c2">JETZT ANRUFEN · JETZT ANRUFEN · </textPath></text></svg><span class="core"><svg><use href="#i-phone"/></svg></span></a></div></div>
+    <div class="tile"><small>Tags &amp; Allergen-Codes</small><div class="center"><div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"><span class="tg s"><svg><use href="#i-flame"/></svg>Empfehlung</span><span class="tg v"><svg><use href="#i-leaf"/></svg>vegetarisch</span><span class="tg h"><svg><use href="#i-chili"/></svg>scharf</span><span class="tg o">Heute aus</span><span class="cd">a</span><span class="cd">f</span><span class="cd">2</span></div></div></div>
+    <div class="tile dk"><small>Wolken · Doppelkontur</small><div class="center" style="gap:20px;display:grid"><svg class="cloud drift" style="width:240px"><use href="#cl-a"/></svg><svg class="cloud drift r" style="width:160px;justify-self:end"><use href="#cl-b"/></svg></div></div>
+    <div class="tile"><small>Bogen- &amp; Mondtor-Rahmen</small><div class="center" style="display:flex;gap:18px;align-items:end"><div style="width:110px;height:150px;border-radius:100px 100px 8px 8px;overflow:hidden"><div class="ph c" style="width:100%;height:100%"></div></div><div style="width:130px;height:130px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 5px var(--white),0 0 0 6.5px var(--gold)"><div class="ph" style="width:100%;height:100%"></div></div></div></div>
+    <div class="tile dk"><small>Admin · Login (ENV)</small><form onsubmit="event.preventDefault()"><div class="field"><label>Benutzername</label><input></div><div class="field"><label>Passwort</label><input type="password"></div><a class="btn" href="#" style="width:100%;justify-content:space-between"><span>Anmelden</span><span class="ic"><svg><use href="#i-arrow"/></svg></span></a></form></div>
+  </div>
+</div></section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="foot" id="footer">
+  <svg class="cloud cl drift" style="left:-40px;top:60px"><use href="#cl-a"/></svg>
+  <svg class="cloud cl drift r" style="right:-30px;top:280px;width:220px"><use href="#cl-b"/></svg>
+  <div class="wrap">
+    <span class="kicker gold">Hunger?</span>
+    <div class="cta" style="margin-top:24px"><a class="tel" href="tel:03683400505" data-hover="ANRUFEN">03683 400505</a><a class="btn" href="#karte" data-mag><span>Speisekarte</span><span class="ic"><svg><use href="#i-arrow"/></svg></span></a></div>
+    <div class="cols">
+      <div><h5>Adresse</h5><p>Renthofstr. 8<br>98574 Schmalkalden</p></div>
+      <div><h5>Öffnungszeiten</h5><p>Di – So · 10:30 – 15:00 · 17:00 – 21:30<br>Mo Ruhetag (außer Feiertage)</p></div>
+      <div><h5>Lieferservice</h5><p>11:00 – 14:00 · 17:00 – 21:00<br>ab 35 € · ab 60 € Wein gratis</p></div>
+    </div>
+    <div class="word">China-Thai-Wok</div>
+    <div class="bot"><span>© 2026 China-Thai-Wok</span><span><a href="#">Impressum</a> · <a href="#">Datenschutz</a></span></div>
+  </div>
+</footer>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+// Intro curtain
+addEventListener('load',()=>{ $('#curtain').classList.add('open'); setTimeout(()=>{document.body.classList.remove('lock');document.body.classList.add('ready')}, reduce?0:1500); setTimeout(()=>$('#curtain').remove(),2600)});
+
+// Cursor + magnetic
+const cur=$('.cur'),dot=$('.cur-dot');let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
+addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.transform=`translate(${mx}px,${my}px) translate(-50%,-50%)`});
+(function loop(){cx+=(mx-cx)*.16;cy+=(my-cy)*.16;cur.style.transform=`translate(${cx}px,${cy}px) translate(-50%,-50%)`;requestAnimationFrame(loop)})();
+$$('[data-hover]').forEach(el=>{el.addEventListener('mouseenter',()=>{cur.classList.add('big');cur.querySelector('span').textContent=el.dataset.hover});el.addEventListener('mouseleave',()=>cur.classList.remove('big'))});
+$$('[data-mag]').forEach(el=>{el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect();el.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.25}px,${(e.clientY-r.top-r.height/2)*.35}px)`});el.addEventListener('mouseleave',()=>el.style.transform='')});
+
+// Hero gate parallax
+$('#hero').addEventListener('mousemove',e=>{const x=(e.clientX/innerWidth-.5)*30,y=(e.clientY/innerHeight-.5)*30;$('#gate .ph').style.transform=`translate(${x}px,${y}px) scale(1.05)`});
+
+// Reveal on view
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.2});
+$$('[data-rv],[data-clip]').forEach(el=>io.observe(el));
+
+// Statement: split words
+const st=$('#stmt');
+st.innerHTML=st.innerHTML.replace(/(<span class="inl">.*?<\/span><\/span>)|<em>(.*?)<\/em>|([^\s<]+)/g,(m,inl,em,w)=>{
+  if(inl)return inl; if(em)return em.split(' ').filter(Boolean).map(x=>`<span class="w g">${x}</span>`).join(' '); return `<span class="w">${w}</span>`});
+const words=$$('#stmt .w');
+
+// Gate zoom
+const zs=$('#zoom'),zp=$('#zpin');
+function zoom(){const r=zs.getBoundingClientRect(),t=Math.min(1,Math.max(0,-r.top/(r.height-innerHeight)));zp.style.setProperty('--r',(14+t*t*80)+'%');zp.style.setProperty('--s',1.3-t*.3);zp.style.setProperty('--po',Math.max(0,1-t*3));zp.style.setProperty('--o',Math.min(1,Math.max(0,(t-.55)*3)))}
+addEventListener('scroll',zoom,{passive:true});zoom();
+
+// Horizontal scroll
+const hs=$('#signature'),track=$('#track'),prog=$('#prog');
+function onScroll(){
+  const r=st.getBoundingClientRect(),p=Math.min(1,Math.max(0,(innerHeight*.85-r.top)/(r.height+innerHeight*.3)));
+  words.forEach((w,i)=>w.classList.toggle('on',i/words.length<p));
+  if(innerWidth>860){const hr=hs.getBoundingClientRect(),max=track.scrollWidth-innerWidth,t=Math.min(1,Math.max(0,-hr.top/(hr.height-innerHeight)));track.style.transform=`translateX(${-t*max}px)`;prog.style.width=t*100+'%'}
+}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+// Menu hover preview
+const pv=$('#preview'),pvph=$('#previewPh');let px=0,py=0,tx=0,ty=0;
+$$('.dish').forEach(d=>{d.addEventListener('mouseenter',()=>{pvph.className='ph '+(d.dataset.ph||'');pv.classList.add('show')});d.addEventListener('mouseleave',()=>pv.classList.remove('show'))});
+addEventListener('mousemove',e=>{tx=e.clientX+170;ty=e.clientY});
+(function pl(){px+=(tx-px)*.12;py+=(ty-py)*.12;pv.style.left=px+'px';pv.style.top=py+'px';requestAnimationFrame(pl)})();
+
+// Filters
+let fv=false,fh=false;const dishes=$$('#dishes .dish');
+function filt(){const q=$('#q').value.toLowerCase().trim();dishes.forEach(d=>{d.style.display=((!fv||d.dataset.v==='1')&&(!fh||d.dataset.h==='1')&&(!q||d.textContent.toLowerCase().includes(q)))?'':'none'})}
+$('#tV').onclick=e=>{fv=!fv;e.currentTarget.classList.toggle('on',fv);filt()};
+$('#tH').onclick=e=>{fh=!fh;e.currentTarget.classList.toggle('on',fh);filt()};
+$('#q').oninput=filt;
+$$('#cats .chip').forEach(c=>c.onclick=()=>{$('#cats .on').classList.remove('on');c.classList.add('on')});
+
+// Counters
+const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target,end=+el.dataset.count,t0=performance.now();
+  (function f(t){const k=Math.min(1,(t-t0)/1600),v=Math.round(end*(1-Math.pow(1-k,4)));el.textContent=v;if(k<1)requestAnimationFrame(f)})(t0);co.unobserve(el)}),{threshold:.6});
+$$('[data-count]').forEach(el=>co.observe(el));
+
+// Opening status
+const n=new Date(),d=n.getDay(),m=n.getHours()*60+n.getMinutes(),idx=(d+6)%7;
+$$('#days span')[idx].classList.add('now');
+if(!(d!==1&&((m>=630&&m<900)||(m>=1020&&m<1290)))){$('#st').classList.add('closed');$('#st span').textContent='Gerade geschlossen'}
+</script>
+</body>
+</html>

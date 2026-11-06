@@ -1,0 +1,184 @@
+---
+import Base from '../layouts/Base.astro';
+import Img from '../components/Img.astro';
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { site, categories, additives, allergens, sauces, euro, dishCount, catImage, shortName, signature } from '../lib/site';
+
+// kleine Vorschaubilder je Kategorie (für die Cursor-Vorschau)
+const sigNrs = new Set(signature.map((s) => s.dish.nr));
+const files = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/*.{jpg,jpeg,png,webp,avif}', { eager: true });
+const byName = Object.fromEntries(Object.entries(files).map(([p, m]) => [p.split('/').pop()!.replace(/\.[^.]+$/, ''), m.default]));
+const preview: Record<string, string> = {};
+for (const c of categories) {
+  const meta = byName[catImage[c.id]];
+  if (meta) preview[c.id] = (await getImage({ src: meta, width: 900, format: 'webp', quality: 72 })).src;
+}
+const sigImg: Record<string, string> = {};
+for (const sg of signature) {
+  const meta = byName[sg.img];
+  if (meta && sg.dish.nr) sigImg[sg.dish.nr] = (await getImage({ src: meta, width: 900, format: 'webp', quality: 72 })).src;
+}
+const strip = (t: string) => t.replace(/^mit\s+/i, '');
+const allergenNames = (d: { allergens: string[] }) => d.allergens.map((k) => allergens[k]).filter(Boolean);
+const additiveNames = (d: { additives: string[] }) => d.additives.map((k) => additives[k] && strip(additives[k])).filter(Boolean);
+const sheetData = categories.map((c) => ({
+  cat: c.name.replace(/\s*\(.*\)$/, ''),
+  side: c.note?.startsWith('mit Reis') ? 'Mit Reis – oder mit gebratenen Nudeln (+3,00 €)' : null,
+  img: preview[c.id] ?? null,
+  items: c.items.map((d) => ({
+    nr: d.nr, name: d.name, desc: d.description, price: euro(d.price), size: d.size ?? null,
+    spicy: d.spicy, veg: !!d.vegetarian, sig: sigNrs.has(d.nr), out: !!d.soldOut,
+    img: (d.nr && sigImg[d.nr]) || preview[c.id] || null,
+    all: allergenNames(d), add: additiveNames(d),
+    sauces: (c.id === 'udon' || d.sauceChoice) ? (d.sauceChoice ?? Object.keys(sauces)).map((k) => ({ k, name: sauces[k]?.name, spicy: sauces[k]?.spicy ?? null })) : null,
+  })),
+}));
+
+const codeTip = (c: string) => (additives[c] ? `${c} – ${additives[c]}` : allergens[c] ? `${c} – ${allergens[c]}` : c);
+const nudelNote = 'Alle Hauptgerichte mit Reis – mit gebratenen Nudeln +3,00 €.';
+
+const menuLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Menu',
+  name: `Speisekarte ${site.name}`,
+  inLanguage: 'de',
+  hasMenuSection: categories.map((c) => ({
+    '@type': 'MenuSection',
+    name: c.name,
+    hasMenuItem: c.items.map((d) => ({
+      '@type': 'MenuItem',
+      name: d.nr ? `${d.nr} ${d.name}` : d.name,
+      ...(d.description ? { description: d.description } : {}),
+      ...(d.vegetarian ? { suitableForDiet: 'https://schema.org/VegetarianDiet' } : {}),
+      offers: { '@type': 'Offer', price: d.price.toFixed(2), priceCurrency: 'EUR' },
+    })),
+  })),
+};
+const crumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Startseite', item: new URL('/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'Speisekarte', item: new URL('/speisekarte/', Astro.site).href },
+  ],
+};
+---
+<Base
+  title={`Speisekarte – ${site.name} ${site.city} | China, Thai & Wok`}
+  description={`Die komplette Speisekarte von ${site.name} in ${site.city}: ${dishCount} Gerichte – Ente, Huhn, Thai-Curry, Udon, Wok-Nudeln & vegetarisch. Mit Preisen und Allergenen.`}
+  page="menu"
+  jsonld={[menuLd, crumbs]}
+>
+  <section class="pagehero">
+    <svg class="cloud drift" aria-hidden="true"><use href="#cl-a" /></svg>
+    <svg class="cloud b drift r" aria-hidden="true"><use href="#cl-b" /></svg>
+    <div class="wrap">
+      <span class="kicker" style="color:var(--gold)">{dishCount} Gerichte · {categories.length} Kategorien</span>
+      <h1>Unsere <span class="it">Speisekarte</span></h1>
+      <p>{nudelNote} Alle Gerichte auch zum Mitnehmen und per Lieferservice – bestellen Sie telefonisch unter <a href={site.tel} style="color:var(--gold);font-weight:700">{site.phone}</a>.</p>
+    </div>
+  </section>
+
+  <nav class="catbar" aria-label="Kategorien">
+    <div class="wrap">
+      {categories.map((c, i) => <a class={`chip${i === 0 ? ' on' : ''}`} href={`#${c.id}`}>{shortName[c.id] ?? c.name} <sup>{c.items.length}</sup></a>)}
+    </div>
+  </nav>
+
+  <div class="wrap" id="menu">
+    <div class="tools">
+      <button class="tgl v" id="tV" aria-pressed="false"><svg><use href="#i-leaf" /></svg>Vegetarisch</button>
+      <button class="tgl h" id="tH" aria-pressed="false"><svg><use href="#i-chili" /></svg>Scharf</button>
+      <label class="srch"><svg aria-hidden="true"><use href="#i-search" /></svg><span class="sr-only">Gericht suchen</span><input id="q" type="search" placeholder="Name oder Nummer suchen…" autocomplete="off" /></label>
+    </div>
+
+    {categories.map((c, ci) => (
+      <section class="mcat" id={c.id} data-img={preview[c.id]} aria-labelledby={`h-${c.id}`}>
+        <div class="side">
+          <div class="big" aria-hidden="true">{String(ci + 1).padStart(2, '0')}</div>
+          <h2 id={`h-${c.id}`}>{c.name.replace(/\s*\(.*\)$/, '')}</h2>
+          {c.name.includes('(') && <p>{c.name.match(/\((.*)\)/)?.[1]}</p>}
+          {c.note && c.id !== 'udon' && <p>{c.note.startsWith('mit Reis') ? nudelNote : c.note}</p>}
+          {catImage[c.id] && <div class="thumb"><Img name={catImage[c.id]} alt={`${c.name} bei ${site.name}`} widths={[400, 640]} sizes="320px" /></div>}
+        </div>
+        <div>
+          {c.id === 'udon' && (
+            <>
+              <p class="muted">Alle Udon-Gerichte mit Soße nach Wahl:</p>
+              <div class="sauces">{Object.entries(sauces).map(([k, s]) => <div><b>{k}</b><span>{s.name}</span><small>{s.spicy ?? ''}</small></div>)}</div>
+            </>
+          )}
+          {c.items.map((d, di) => {
+            const hot = !!d.spicy;
+            const all = allergenNames(d), add = additiveNames(d);
+            return (
+              <article class={`dish${d.soldOut ? ' out' : ''}`} data-ci={ci} data-di={di} tabindex="0" role="button" aria-haspopup="dialog" aria-label={`${d.name}, ${euro(d.price)} – Details anzeigen`} data-v={d.vegetarian ? '1' : '0'} data-h={hot ? '1' : '0'} data-s={`${d.nr ?? ''} ${d.name} ${d.description ?? ''}`.toLowerCase()}>
+                <span class="no">{d.nr ?? '–'}</span>
+                <h3>{d.name}{d.size && <span class="muted" style="font-weight:500"> · {d.size}</span>}</h3>
+                <span class="pr">{euro(d.price)}</span>
+                {d.description && <p>{d.description}</p>}
+                {(hot || d.vegetarian || sigNrs.has(d.nr) || d.sauceChoice || d.soldOut) && (
+                  <div class="tags">
+                    {sigNrs.has(d.nr) && <span class="tg s"><svg aria-hidden="true"><use href="#i-flame" /></svg>Empfehlung</span>}
+                    {!!d.vegetarian && <span class="tg v"><svg aria-hidden="true"><use href="#i-leaf" /></svg>vegetarisch</span>}
+                    {hot && <span class="tg h"><svg aria-hidden="true"><use href="#i-chili" /></svg>{d.spicy}</span>}
+                    {d.sauceChoice && <span class="tg">Soße nach Wahl</span>}
+                    {!!d.soldOut && <span class="tg o">Heute aus</span>}
+                  </div>
+                )}
+                {(all.length > 0 || add.length > 0) && (
+                  <p class="facts">
+                    {all.length > 0 && <span><b>Allergene:</b> {all.join(', ')}</span>}
+                    {add.length > 0 && <span><b>Zusatzstoffe:</b> {add.join(', ')}</span>}
+                  </p>
+                )}
+                <span class="more" aria-hidden="true">Details<svg><use href="#i-arrow" /></svg></span>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    ))}
+    <p class="empty" id="empty">Keine Gerichte gefunden. Bitte Filter oder Suche ändern.</p>
+
+    <section class="legend" id="allergene" aria-labelledby="legH" style="margin:40px 0 140px">
+      <svg class="cloud drift" style="position:absolute;right:24px;top:24px;width:150px;opacity:.6" aria-hidden="true"><use href="#cl-a" /></svg>
+      <div>
+        <h2 id="legH">Zusatzstoffe</h2>
+        <ul>{Object.entries(additives).map(([k, v]) => <li><b>{k}</b>{v}</li>)}</ul>
+        <p style="margin-top:24px;font-size:14px;color:var(--mist)">Bei Fragen zu Allergenen sprechen Sie uns gern an.</p>
+      </div>
+      <div>
+        <h2>Allergene</h2>
+        <ul>{Object.entries(allergens).map(([k, v]) => <li><b>{k}</b>{v}</li>)}</ul>
+      </div>
+    </section>
+  </div>
+
+  <script type="application/json" id="dishData" set:html={JSON.stringify(sheetData)} />
+  <div class="sheet" id="sheet" hidden>
+    <div class="sheet-bg" data-close></div>
+    <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="shName">
+      <span class="sheet-grip" aria-hidden="true"></span>
+      <button class="sheet-x" data-close aria-label="Schließen"><svg><use href="#i-close" /></svg></button>
+      <div class="sheet-img"><img id="shImg" alt="" /><span class="sh-no" id="shNo"></span></div>
+      <div class="sheet-body">
+        <span class="kicker" id="shCat" style="color:var(--gold-ink)"></span>
+        <h2 id="shName"></h2>
+        <p id="shDesc" class="sh-desc"></p>
+        <div class="sh-badges" id="shBadges"></div>
+        <div class="sh-price"><b id="shPrice"></b><small id="shSide"></small></div>
+        <div id="shSauces" class="sh-block"></div>
+        <div class="sh-block"><h3>Allergene</h3><ul id="shAll" class="chips"></ul></div>
+        <div class="sh-block"><h3>Zusatzstoffe</h3><ul id="shAdd" class="chips"></ul></div>
+        <a class="btn" href={site.tel} style="width:100%;justify-content:space-between;margin-top:8px"><span>Jetzt bestellen · {site.phone}</span><span class="ic"><svg><use href="#i-phone" /></svg></span></a>
+        <div class="sh-nav">
+          <button id="shPrev" aria-label="Vorheriges Gericht"><svg style="transform:rotate(180deg)"><use href="#i-arrow" /></svg>Zurück</button>
+          <button id="shNext" aria-label="Nächstes Gericht">Weiter<svg><use href="#i-arrow" /></svg></button>
+        </div>
+        <p class="sh-note">Bei Allergien oder Unverträglichkeiten fragen Sie uns bitte vor der Bestellung.</p>
+      </div>
+    </div>
+  </div>
+</Base>

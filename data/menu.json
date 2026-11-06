@@ -1,0 +1,2641 @@
+{
+  "restaurant": {
+    "name": "China-Thai-Wok",
+    "workingBrandName": "China Haus",
+    "slogan": "Feine asiatische Schnellküche – immer frisch zubereitet",
+    "owner": "Dang Hoai Do",
+    "address": {
+      "street": "Renthofstr. 8",
+      "postalCode": "98574",
+      "city": "Schmalkalden",
+      "country": "DE"
+    },
+    "phone": "03683 400505",
+    "phoneE164": "+493683400505",
+    "menuValidFrom": "2026-04-01",
+    "takeaway": true,
+    "openingHours": {
+      "monday": "Ruhetag (an Feiertagen geöffnet: 10:30-15:00, 17:00-21:30)",
+      "tuesday-sunday": [
+        "10:30-15:00",
+        "17:00-21:30"
+      ]
+    },
+    "delivery": {
+      "hours": [
+        "11:00-14:00",
+        "17:00-21:00"
+      ],
+      "minimumOrderSchmalkalden": 35,
+      "outsideSchmalkalden": "bitte erfragen",
+      "promo": "ab 60 € Bestellwert 1 Flasche Wein gratis"
+    },
+    "partyservice": "Wir liefern auf Wunsch alle Gerichte außer Haus in Warmhaltebehältern. Für große Feiern, sowie Geburtstags-, Betriebs- und Weihnachtsfeiern.",
+    "sideOption": {
+      "default": "Reis",
+      "alternative": "gebratene Nudeln",
+      "surcharge": 3.0
+    }
+  },
+  "additives": {
+    "1": "mit Konservierungsstoff",
+    "2": "mit Süßungsmittel",
+    "3": "mit Antioxidationsmittel",
+    "4": "mit Farbstoff",
+    "7": "mit Geschmacksverstärker"
+  },
+  "allergens": {
+    "a": "Eier",
+    "b": "Fisch",
+    "c": "Weichtiere",
+    "d": "Krebstiere",
+    "e": "Glutenhaltiges Getreide",
+    "f": "Schalenfrüchte",
+    "g": "Sojabohnen",
+    "h": "Sellerie",
+    "i": "Senf",
+    "j": "Milch",
+    "k": "Sesamsamen"
+  },
+  "sauceOptions": {
+    "A": {
+      "name": "Dunkle Soße",
+      "codes": "1,4,7,c,e,g"
+    },
+    "B": {
+      "name": "Mangosoße",
+      "codes": "7,g"
+    },
+    "C": {
+      "name": "Rote Thai Currysoße",
+      "codes": "1,4,7,b,j",
+      "spicy": "scharf"
+    },
+    "E": {
+      "name": "Erdnusssoße",
+      "codes": "7,f,j",
+      "spicy": "leicht scharf"
+    }
+  },
+  "categories": [
+    {
+      "id": "vorspeisen",
+      "name": "Vorspeisen",
+      "note": null,
+      "categoryCodes": null,
+      "items": [
+        {
+          "nr": "1",
+          "name": "Pekingsuppe",
+          "description": "Entenfleisch mit Gemüse, süß-sauer",
+          "additives": [
+            "1",
+            "7"
+          ],
+          "allergens": [
+            "a"
+          ],
+          "price": 3.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "2",
+          "name": "Hühnerfleischsuppe",
+          "description": "Glasnudeln, Hühnerfleisch und Gemüse",
+          "additives": [
+            "3",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "g",
+            "h",
+            "i",
+            "j"
+          ],
+          "price": 4.2,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "3A",
+          "name": "Wan-Tan Suppe",
+          "description": "gefüllte Teigtaschen mit Fleisch u. Gemüse",
+          "additives": [
+            "3",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "d",
+            "e",
+            "g",
+            "h",
+            "i",
+            "j"
+          ],
+          "price": 4.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "3B",
+          "name": "Gebackene Wan Tan mit süß-sauer-scharf Dipp",
+          "description": null,
+          "additives": [
+            "1"
+          ],
+          "allergens": [
+            "e",
+            "d"
+          ],
+          "price": 4.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "4",
+          "name": "Thailandsuppe",
+          "description": "Nudeln, Hühnerfleisch & Gemüse",
+          "additives": [
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "b",
+            "d",
+            "e",
+            "g",
+            "h",
+            "j",
+            "k"
+          ],
+          "price": 4.9,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "5",
+          "name": "Tom Ka Gai",
+          "description": "Hühnerfleischsuppe mit Champignons, Kokosmilch",
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "b",
+            "g",
+            "f",
+            "j"
+          ],
+          "price": 5.9,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "6",
+          "name": "Tom Ka Gung",
+          "description": "Garnelensuppe mit Champignons, Kokosmilch",
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "b",
+            "g",
+            "j"
+          ],
+          "price": 5.9,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "7A",
+          "name": "Minifrühlingsrolle (vegetarisch), 6 Stück mit Salat",
+          "description": null,
+          "additives": [
+            "1"
+          ],
+          "allergens": [
+            "e"
+          ],
+          "price": 4.1,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": "7B",
+          "name": "Frühlingsrolle (mit Hühnerfleisch), 3 Stück mit Salat",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "c",
+            "d",
+            "e",
+            "h",
+            "i",
+            "j",
+            "k"
+          ],
+          "price": 5.4,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "8",
+          "name": "Asia-Salat",
+          "description": "gemischter Salat mit hausgemachter Soße",
+          "additives": [
+            "3",
+            "4"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "h"
+          ],
+          "price": 4.9,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": "9",
+          "name": "Hühnerfleischsalat mit hausgemachter Soße",
+          "description": null,
+          "additives": [
+            "3",
+            "4"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "h"
+          ],
+          "price": 5.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "10",
+          "name": "Krabbenchips",
+          "description": null,
+          "additives": [],
+          "allergens": [],
+          "price": 3.5,
+          "spicy": null,
+          "vegetarian": false
+        }
+      ]
+    },
+    {
+      "id": "gebratener-reis",
+      "name": "Gebratener Reis",
+      "note": null,
+      "categoryCodes": null,
+      "items": [
+        {
+          "nr": "11",
+          "name": "Gebratener Reis mit Eiern und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 7.7,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": "12",
+          "name": "Gebratener Reis mit Eiern, Hühnerfleisch und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 8.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "13",
+          "name": "Gebratener Reis mit Eiern, Rindfleisch und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 9.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "14",
+          "name": "Gebratener Reis mit Eiern, Schweinefleisch und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 9.2,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "15",
+          "name": "Gebratener Reis mit Eiern, gebackener Hühnerbrust und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 9.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "16",
+          "name": "Gebratener Reis mit Eiern, knusprigem Huhn und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 10.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "18",
+          "name": "Gebratener Reis mit Eiern, knuspriger Ente und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 11.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "19",
+          "name": "Gebratener Reis mit Eiern, Großgarnelen und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 11.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "20",
+          "name": "Nasi-Goreng",
+          "description": "gebratener Reis mit Eiern, Hühnerfleisch, Großgarnelen, Curry & Gemüse",
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "h",
+            "i"
+          ],
+          "price": 9.9,
+          "spicy": "scharf",
+          "vegetarian": false
+        }
+      ]
+    },
+    {
+      "id": "gebratene-nudeln",
+      "name": "Gebratene Nudeln",
+      "note": null,
+      "categoryCodes": null,
+      "items": [
+        {
+          "nr": "21",
+          "name": "Gebratene Nudeln mit Eiern und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 7.7,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": "22",
+          "name": "Gebratene Nudeln mit Eiern, Hühnerfleisch und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 8.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "23",
+          "name": "Gebratene Nudeln mit Eiern, Rindfleisch und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 9.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "24",
+          "name": "Gebratene Nudeln mit Eiern, Schweinefleisch und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 9.2,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "25",
+          "name": "Gebratene Nudeln mit Eiern, gebackener Hühnerbrust und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 9.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "26",
+          "name": "Gebratene Nudeln mit Eiern, knusprigem Huhn und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 10.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "28",
+          "name": "Gebratene Nudeln mit Eiern, knuspriger Ente und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 11.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "29",
+          "name": "Gebratene Nudeln mit Eiern, Großgarnelen und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 11.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "30",
+          "name": "Bami-Goreng",
+          "description": "gebratene Nudeln mit Eiern, Hühnerfleisch, Großgarnelen, Curry und Gemüse",
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "h",
+            "i"
+          ],
+          "price": 9.9,
+          "spicy": "scharf",
+          "vegetarian": false
+        }
+      ]
+    },
+    {
+      "id": "gebratene-glasnudeln",
+      "name": "Gebratene Glasnudeln",
+      "note": null,
+      "categoryCodes": null,
+      "items": [
+        {
+          "nr": "31",
+          "name": "Gebratene Glasnudeln mit verschiedenem Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 9.5,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": "32",
+          "name": "Gebratene Glasnudeln mit Hühnerfleisch und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 10.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "33",
+          "name": "Gebratene Glasnudeln mit Rindfleisch und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 10.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "34",
+          "name": "Gebratene Glasnudeln mit Schweinefleisch und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 10.7,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "49",
+          "name": "Gebratene Glasnudeln mit gebackener Hühnerbrust und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 10.7,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "59",
+          "name": "Gebratene Glasnudeln mit knusprigem Huhn und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 11.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "77",
+          "name": "Gebratene Glasnudeln mit knuspriger Ente und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 12.5,
+          "spicy": null,
+          "vegetarian": false
+        }
+      ]
+    },
+    {
+      "id": "vegetarisch-tofu",
+      "name": "Vegetarische und Tofu Gerichte",
+      "note": "mit Reis (od. gebratenen Nudeln +3,00 €)",
+      "categoryCodes": "a,g",
+      "items": [
+        {
+          "nr": "35A",
+          "name": "Asiatisches Gemüse gebraten mit dunkler Soße",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 9.2,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": "35B",
+          "name": "Asiatisches Gemüse mit Mangosoße",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "g"
+          ],
+          "price": 9.8,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": "35C",
+          "name": "Asiatisches Gemüse mit roter Thai Currysoße",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "b",
+            "j"
+          ],
+          "price": 9.8,
+          "spicy": "scharf",
+          "vegetarian": true
+        },
+        {
+          "nr": "35E",
+          "name": "Asiatisches Gemüse mit Erdnusssoße",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "f",
+            "j"
+          ],
+          "price": 9.8,
+          "spicy": "leicht scharf",
+          "vegetarian": true
+        },
+        {
+          "nr": "36",
+          "name": "Tofu mit verschiedenem Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e"
+          ],
+          "price": 9.9,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": "37",
+          "name": "Tofu mit Erdnusssoße und Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "f",
+            "j"
+          ],
+          "price": 10.2,
+          "spicy": "leicht scharf",
+          "vegetarian": true
+        },
+        {
+          "nr": "39A",
+          "name": "Tofu mit Mangosoße, exotischen Gewürzen und Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "g"
+          ],
+          "price": 10.2,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": "39B",
+          "name": "Tofu mit Curry und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "g",
+            "h",
+            "i",
+            "j"
+          ],
+          "price": 10.2,
+          "spicy": "scharf",
+          "vegetarian": true
+        }
+      ]
+    },
+    {
+      "id": "huehnerfleisch",
+      "name": "Hühnerfleisch Gerichte",
+      "note": "mit Reis (od. gebratenen Nudeln +3,00 €)",
+      "categoryCodes": "a,g",
+      "items": [
+        {
+          "nr": "40A",
+          "name": "ChopSuey Hühnerfleisch mit verschiedenem Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 10.2,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "40B",
+          "name": "Gebackene Hühnerbrust mit Champignons & Spargel",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 10.7,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "41A",
+          "name": "Hühnerfleisch, Erdnusssoße, Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "f",
+            "j"
+          ],
+          "price": 10.5,
+          "spicy": "leicht scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "41B",
+          "name": "Gebackene Hühnerbrust, Erdnusssoße, Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "f",
+            "j"
+          ],
+          "price": 10.9,
+          "spicy": "leicht scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "42A",
+          "name": "Hühnerfleisch mit Curry, Bambus & Champignons",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "h",
+            "i",
+            "j"
+          ],
+          "price": 10.4,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "42B",
+          "name": "Gebackene Hühnerbrust mit Curry, Kokosmilch, Bambus und Champignons",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "h",
+            "i",
+            "j"
+          ],
+          "price": 10.7,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "43",
+          "name": "Hühnerfleisch mit Paprika, Zwiebeln und Hoisin",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g",
+            "k"
+          ],
+          "price": 10.2,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "44A",
+          "name": "Hühnerfleisch mit Mango Soße, exotischen Gewürzen und Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "g"
+          ],
+          "price": 10.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "44B",
+          "name": "Gebackene Hühnerbrust mit Mango Soße, exotischen Gewürzen und Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "g"
+          ],
+          "price": 10.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "45",
+          "name": "Gebackene Hühnerbrust, Ananas und süß-sauer Soße",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e"
+          ],
+          "price": 10.6,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "46",
+          "name": "Gebackene Hühnerbrust, Bambus, Zwiebeln & Hoisin",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "g",
+            "k"
+          ],
+          "price": 10.7,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "47",
+          "name": "Gebackene Hühnerbrust mit verschiedenem Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 10.7,
+          "spicy": null,
+          "vegetarian": false
+        }
+      ]
+    },
+    {
+      "id": "schweinefleisch",
+      "name": "Schweinefleisch Gerichte",
+      "note": "mit Reis (od. gebratenen Nudeln +3,00 €)",
+      "categoryCodes": "a,g",
+      "items": [
+        {
+          "nr": "50A",
+          "name": "ChopSuey Schweinefleisch mit verschiedenem Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 10.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "50B",
+          "name": "Schweinefleisch mit Champignons & Spargel",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 10.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "51A",
+          "name": "Schweinefleisch mit Erdnusssoße, Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "f",
+            "j"
+          ],
+          "price": 10.7,
+          "spicy": "leicht scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "52",
+          "name": "Schweinefleisch mit Curry, Kokosmilch, Bambus und Champignons",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "h",
+            "i",
+            "j"
+          ],
+          "price": 10.5,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "53",
+          "name": "Schweinefleisch mit Paprika, Zwiebeln & Hoisin",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g",
+            "k"
+          ],
+          "price": 10.5,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "54",
+          "name": "Schweinefleisch mit Mangosoße, exotischen Gewürzen & Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "g"
+          ],
+          "price": 10.7,
+          "spicy": null,
+          "vegetarian": false
+        }
+      ]
+    },
+    {
+      "id": "knuspriges-huhn",
+      "name": "Gerichte mit knusprigem Huhn",
+      "note": "mit Reis (od. gebratenen Nudeln +3,00 €)",
+      "categoryCodes": "a,g",
+      "items": [
+        {
+          "nr": "55",
+          "name": "Knuspriges Huhn mit verschiedenem Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 11.2,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "55B",
+          "name": "Knuspriges Huhn, Erdnusssoße, Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "f",
+            "j"
+          ],
+          "price": 11.5,
+          "spicy": "leicht scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "56",
+          "name": "Knuspriges Huhn mit Paprika, Zwiebeln & Hoisin",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g",
+            "k"
+          ],
+          "price": 11.2,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "57",
+          "name": "Knuspriges Huhn mit Curry, Kokosmilch & Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "h",
+            "i",
+            "j"
+          ],
+          "price": 11.2,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "58A",
+          "name": "Knuspriges Huhn mit Paprika, Ananas, süß-sauer Soße",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e"
+          ],
+          "price": 11.2,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "58B",
+          "name": "Knuspriges Huhn mit Mangosoße, exotischen Gewürzen, Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 11.5,
+          "spicy": null,
+          "vegetarian": false
+        }
+      ]
+    },
+    {
+      "id": "rindfleisch",
+      "name": "Rindfleisch Gerichte",
+      "note": "mit Reis (od. gebratenen Nudeln +3,00 €)",
+      "categoryCodes": "a,g",
+      "items": [
+        {
+          "nr": "60A",
+          "name": "ChopSuey Rindfleisch mit verschiedenem Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 10.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "60B",
+          "name": "Rindfleisch mit Champignons und Spargel",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 10.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "61A",
+          "name": "Rindfleisch, Erdnusssoße, Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "f",
+            "j"
+          ],
+          "price": 11.2,
+          "spicy": "leicht scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "62",
+          "name": "Rindfleisch mit Curry, Bambus u. Champignons",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "h",
+            "i",
+            "j"
+          ],
+          "price": 10.9,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "63",
+          "name": "Rindfleisch mit Paprika, Zwiebeln und Hoisin",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g",
+            "k"
+          ],
+          "price": 10.9,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "64",
+          "name": "Rindfleisch mit Mangosoße, exotischen Gewürzen und Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "g"
+          ],
+          "price": 11.2,
+          "spicy": null,
+          "vegetarian": false
+        }
+      ]
+    },
+    {
+      "id": "ente",
+      "name": "Entenfleisch Gerichte",
+      "note": "mit Reis (od. gebratenen Nudeln +3,00 €)",
+      "categoryCodes": "a,g",
+      "items": [
+        {
+          "nr": "70B",
+          "name": "Knusprige Ente mit Champignons & Spargel",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 12.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "71",
+          "name": "Knusprige Ente mit chinesischen Pilzen, Broccoli",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 12.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "71B",
+          "name": "Knusprige Ente, Erdnusssoße, Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "f",
+            "j"
+          ],
+          "price": 12.9,
+          "spicy": "leicht scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "72",
+          "name": "Knusprige Ente mit Curry, Kokosmilch, Bambus und Champignons",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "h",
+            "i",
+            "j"
+          ],
+          "price": 12.5,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "73",
+          "name": "Knusprige Ente mit Paprika, Zwiebeln & Hoisin",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g",
+            "k"
+          ],
+          "price": 12.5,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "74",
+          "name": "Knusprige Ente mit Ananas, Paprika u. süß-sauer Soße",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e"
+          ],
+          "price": 12.2,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "75",
+          "name": "Knusprige Ente Hongkong Art mit dunkler Soße und verschiedenem Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g",
+            "k"
+          ],
+          "price": 12.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "76",
+          "name": "Knusprige Ente mit Mango Soße, exotischen Gewürzen u. Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 12.9,
+          "spicy": null,
+          "vegetarian": false
+        }
+      ]
+    },
+    {
+      "id": "meeresfruechte",
+      "name": "Meeresfrüchte Gerichte",
+      "note": "mit Reis (od. gebratenen Nudeln +3,00 €)",
+      "categoryCodes": "a,g",
+      "items": [
+        {
+          "nr": "80A",
+          "name": "ChopSuey gebackenes Fischfilet mit verschiedenem Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 11.2,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "80B",
+          "name": "Gebackenes Fischfilet mit Champignons & Spargel",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 11.2,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "81A",
+          "name": "Gebackenes Fischfilet, Erdnusssoße, Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "f",
+            "j"
+          ],
+          "price": 11.5,
+          "spicy": "leicht scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "82",
+          "name": "Gebackenes Fischfilet mit Curry, Kokosmilch, Bambus und Champignons",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "h",
+            "i",
+            "j"
+          ],
+          "price": 11.2,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "83",
+          "name": "Gebackenes Fischfilet mit Paprika, Zwiebeln & Hoisin",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "g",
+            "k"
+          ],
+          "price": 11.2,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "84",
+          "name": "Gebackenes Fischfilet mit Ananas, Paprika, süß-sauer Soße",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e"
+          ],
+          "price": 11.2,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "84B",
+          "name": "Gebackenes Fischfilet, Mangosoße, exotischen Gewürzen und Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "g"
+          ],
+          "price": 11.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "85A",
+          "name": "ChopSuey Großgarnelen mit verschiedenem Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 12.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "85B",
+          "name": "Großgarnelen mit Champignons & Spargel",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 12.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "86A",
+          "name": "Großgarnelen mit Erdnusssoße u. Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "f",
+            "j"
+          ],
+          "price": 12.9,
+          "spicy": "leicht scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "87",
+          "name": "Großgarnelen mit Curry, Bambus & Champignons",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "h",
+            "i",
+            "j"
+          ],
+          "price": 12.5,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "88",
+          "name": "Großgarnelen mit Paprika, Zwiebeln und Hoisin",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g",
+            "k"
+          ],
+          "price": 12.5,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "89",
+          "name": "Großgarnelen mit Mangosoße",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "g"
+          ],
+          "price": 12.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "89A",
+          "name": "Gebackene Großgarnelen mit Gemüse und wahlweise Soße",
+          "description": null,
+          "additives": [],
+          "allergens": [],
+          "price": 13.9,
+          "spicy": null,
+          "vegetarian": false,
+          "sauceChoice": [
+            "A",
+            "B",
+            "C",
+            "E"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "grossgerichte",
+      "name": "Großgerichte",
+      "note": "mit Reis (od. gebratenen Nudeln +3,00 €)",
+      "categoryCodes": "a,g",
+      "items": [
+        {
+          "nr": "90",
+          "name": "ChopSuey Hühnerfleisch mit verschiedenem Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 12.4,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "91A",
+          "name": "Hühnerfleisch, Erdnusssoße, Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "f",
+            "j"
+          ],
+          "price": 12.6,
+          "spicy": "leicht scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "91B",
+          "name": "Gebackene Hühnerbrust, Erdnusssoße, Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "f",
+            "j"
+          ],
+          "price": 13.0,
+          "spicy": "leicht scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "92",
+          "name": "Hühnerfleisch mit Curry, Bambus & Champignons",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "h",
+            "i",
+            "j"
+          ],
+          "price": 12.6,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "93",
+          "name": "Gebackene Hühnerbrust mit Paprika, Zwiebeln & Hoisin",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g",
+            "k"
+          ],
+          "price": 12.9,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "94",
+          "name": "Gebackene Hühnerbrust mit Ananas & süß-sauer Soße",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "j"
+          ],
+          "price": 12.9,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "95",
+          "name": "Gebackene Hühnerbrust mit Curry, Bambus & Champignons",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "h",
+            "i"
+          ],
+          "price": 13.0,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "96",
+          "name": "Acht Kostbarkeiten: gebratene Großgarnelen, Hühner-, Schweine-, Rindfleisch & verschiedenes Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 14.9,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "97A",
+          "name": "Hühnerfleisch mit verschiedenem Gemüse, Mangosoße",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "g"
+          ],
+          "price": 12.6,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "97B",
+          "name": "Gebackene Hühnerbrust mit verschiedenem Gemüse, Mangosoße",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e",
+            "g"
+          ],
+          "price": 13.0,
+          "spicy": null,
+          "vegetarian": false
+        }
+      ]
+    },
+    {
+      "id": "entengrossgerichte",
+      "name": "Entengroßgerichte (knusprige halbe Ente)",
+      "note": "mit Reis (od. gebratenen Nudeln +3,00 €)",
+      "categoryCodes": "a,g",
+      "items": [
+        {
+          "nr": "100B",
+          "name": "Knusprige halbe Ente mit Champignons & Spargel",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 18.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "101",
+          "name": "Knusprige halbe Ente mit chinesischen Pilzen & Broccoli",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 18.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "101B",
+          "name": "Knusprige Ente, Erdnusssoße, Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "f",
+            "j"
+          ],
+          "price": 18.9,
+          "spicy": "leicht scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "102",
+          "name": "Knusprige halbe Ente mit Curry, Kokosmilch, Bambus & Champignons",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "h",
+            "i",
+            "j"
+          ],
+          "price": 18.5,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "103",
+          "name": "Knusprige halbe Ente mit Paprika, Zwiebeln & Hoisin",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g",
+            "k"
+          ],
+          "price": 18.5,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "104",
+          "name": "Knusprige halbe Ente mit Ananas, Paprika & süß-sauer Soße",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e"
+          ],
+          "price": 18.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "105",
+          "name": "Knusprige halbe Ente Hongkong Art mit dunkler Soße und verschiedenem Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g",
+            "k"
+          ],
+          "price": 18.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "106",
+          "name": "Knusprige halbe Ente mit Mangosoße, exotischen Gewürzen und Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "e",
+            "g"
+          ],
+          "price": 18.9,
+          "spicy": null,
+          "vegetarian": false
+        }
+      ]
+    },
+    {
+      "id": "thai-spezialitaeten",
+      "name": "Thailändische Spezialitäten",
+      "note": "mit Reis (od. gebratenen Nudeln +3,00 €)",
+      "categoryCodes": "a,g",
+      "items": [
+        {
+          "nr": "T1",
+          "name": "Tofu mit rotem Curry, Kokosmilch und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "b",
+            "g",
+            "j"
+          ],
+          "price": 10.2,
+          "spicy": "scharf",
+          "vegetarian": true
+        },
+        {
+          "nr": "T2",
+          "name": "Hühnerfleisch mit Zitronengras und Kokosmilch",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "b",
+            "j"
+          ],
+          "price": 10.4,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "T3",
+          "name": "Gebackene Hühnerbrust mit Bambus, Kokosmilch und Champignons",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "b",
+            "e",
+            "j"
+          ],
+          "price": 10.9,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "T4",
+          "name": "Knuspriges Huhn mit rotem Curry, Kokosmilch und Zitronengras",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "b",
+            "e",
+            "j"
+          ],
+          "price": 11.5,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "T5",
+          "name": "Schweinefleisch mit rotem Curry, Kokosmilch und Gemüse",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "b",
+            "j"
+          ],
+          "price": 10.7,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "T7",
+          "name": "Rindfleisch mit Gemüse und Kokosmilch",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "b",
+            "j"
+          ],
+          "price": 10.9,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "T8",
+          "name": "Gebackenes Fischfilet mit rotem Curry, Kokosmilch und Zitronengras",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "b",
+            "e",
+            "j"
+          ],
+          "price": 11.5,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "T9",
+          "name": "Großgarnelen mit Gemüse und Kokosmilch",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "b",
+            "j"
+          ],
+          "price": 12.9,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "T11",
+          "name": "Knusprige Ente mit Gemüse nach thailändischer Art",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "b",
+            "e",
+            "j"
+          ],
+          "price": 12.9,
+          "spicy": "scharf",
+          "vegetarian": false
+        },
+        {
+          "nr": "T12",
+          "name": "Knusprige halbe Ente mit Zitronengras und Kokosmilch",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "b",
+            "e",
+            "j"
+          ],
+          "price": 16.9,
+          "spicy": "scharf",
+          "vegetarian": false
+        }
+      ]
+    },
+    {
+      "id": "udon",
+      "name": "Udon-Nudeln Gerichte",
+      "note": "Soße wählbar: A, B, C oder E (siehe sauceOptions)",
+      "categoryCodes": null,
+      "items": [
+        {
+          "nr": "U1",
+          "name": "Udon-Nudeln mit Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e"
+          ],
+          "price": 9.5,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": "U2",
+          "name": "Udon-Nudeln mit Hühnerfleisch und Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e"
+          ],
+          "price": 10.5,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "U3",
+          "name": "Udon-Nudeln mit Rindfleisch und Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e"
+          ],
+          "price": 12.0,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "U5",
+          "name": "Udon-Nudeln mit gebackener Hühnerbrust u. Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e"
+          ],
+          "price": 11.4,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "U6",
+          "name": "Udon-Nudeln mit knusprigem Huhn und Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e"
+          ],
+          "price": 12.0,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "U8",
+          "name": "Udon-Nudeln mit knuspriger Ente und Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e"
+          ],
+          "price": 13.0,
+          "spicy": null,
+          "vegetarian": false
+        },
+        {
+          "nr": "U9",
+          "name": "Udon-Nudeln mit Garnelen und Gemüse",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "a",
+            "e"
+          ],
+          "price": 13.4,
+          "spicy": null,
+          "vegetarian": false
+        }
+      ]
+    },
+    {
+      "id": "extra-sossen",
+      "name": "Extra Soßen",
+      "note": null,
+      "categoryCodes": null,
+      "items": [
+        {
+          "nr": null,
+          "name": "Dunkle Soße",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "c",
+            "e",
+            "g"
+          ],
+          "price": 2.5,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": null,
+          "name": "Süß-sauer Soße",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "e"
+          ],
+          "price": 2.5,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": null,
+          "name": "Curry-Soße",
+          "description": null,
+          "additives": [
+            "1",
+            "4",
+            "7"
+          ],
+          "allergens": [
+            "h",
+            "i"
+          ],
+          "price": 3.0,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": null,
+          "name": "Mango-Soße",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "g"
+          ],
+          "price": 3.0,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": null,
+          "name": "Erdnuss-Soße",
+          "description": null,
+          "additives": [
+            "7"
+          ],
+          "allergens": [
+            "f",
+            "j"
+          ],
+          "price": 3.0,
+          "spicy": null,
+          "vegetarian": true
+        }
+      ]
+    },
+    {
+      "id": "nachspeisen",
+      "name": "Nachspeisen",
+      "note": null,
+      "categoryCodes": null,
+      "items": [
+        {
+          "nr": "107",
+          "name": "Gebackene Banane mit Honig",
+          "description": null,
+          "additives": [],
+          "allergens": [],
+          "price": 4.0,
+          "spicy": null,
+          "vegetarian": true
+        },
+        {
+          "nr": "108",
+          "name": "Gebackene Ananas mit Honig",
+          "description": null,
+          "additives": [],
+          "allergens": [],
+          "price": 4.0,
+          "spicy": null,
+          "vegetarian": true
+        }
+      ]
+    },
+    {
+      "id": "getraenke",
+      "name": "Getränke (Preis je Flasche)",
+      "note": null,
+      "categoryCodes": null,
+      "items": [
+        {
+          "nr": null,
+          "name": "Coca Cola",
+          "description": null,
+          "additives": [],
+          "allergens": [],
+          "price": 3.5,
+          "spicy": null,
+          "vegetarian": false,
+          "size": "1,0 l"
+        },
+        {
+          "nr": null,
+          "name": "Guava-, Mango-, Lycheesaft",
+          "description": null,
+          "additives": [],
+          "allergens": [],
+          "price": 3.0,
+          "spicy": null,
+          "vegetarian": false,
+          "size": "0,25 l"
+        },
+        {
+          "nr": null,
+          "name": "Chinabier „Tsing Tao“",
+          "description": null,
+          "additives": [],
+          "allergens": [],
+          "price": 3.0,
+          "spicy": null,
+          "vegetarian": false,
+          "size": "0,33 l"
+        },
+        {
+          "nr": null,
+          "name": "Leikeim Bier",
+          "description": null,
+          "additives": [],
+          "allergens": [],
+          "price": 2.6,
+          "spicy": null,
+          "vegetarian": false,
+          "size": "0,5 l"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Kategorie-Codes 'a,g' im Kopf der Hauptgerichte (vermutlich für Reis/Nudel-Beilage) als categoryCodes gespeichert",
+    "Vegetarisch nur abgeleitet (Flyer markiert nur 7A explizit); dunkle Soße enthält c (Weichtiere/Austernsoße) -> nicht streng vegetarisch",
+    "Nummern fehlen im Flyer: 17, 27, 35D, 38, 51B, 61B, 81B, 86B, 98-100A, U4, U7, T6, T10, Soße D",
+    "Tom Ka Gai/Gung: 'j' steht vor 'scharf' – als Allergen j übernommen",
+    "50A Code 'c.e' als Tippfehler für 'c,e' gelesen; 87/88 'jscharf'/'kscharf' getrennt",
+    "Nachspeisen 'Honige' -> 'Honig' korrigiert",
+    "Krabbenchips, Nachspeisen, Getränke ohne Kennzeichnung",
+    "89A: Allergene je nach gewählter Soße",
+    "Preise Vorspeisen aus Spaltenzuordnung (Layout) abgeleitet"
+  ]
+}

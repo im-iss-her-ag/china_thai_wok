@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+interface Props { title: string; description: string }
+const { title, description } = Astro.props;
+---
+<Base title={title} description={description} page="legal">
+  <section class="pagehero small">
+    <svg class="cloud drift" aria-hidden="true"><use href="#cl-a" /></svg>
+    <div class="wrap"><span class="kicker" style="color:var(--gold)">Rechtliches</span><h1><slot name="h1" /></h1></div>
+  </section>
+  <div class="wrap"><article class="legal"><slot /></article></div>
+</Base>

@@ -1,0 +1,13 @@
+// @ts-check
+import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
+
+// TODO: echte Domain eintragen (oder per ENV SITE_URL in Cloudflare Pages setzen)
+const site = process.env.SITE_URL || 'https://www.china-thai-wok.de';
+
+export default defineConfig({
+  site,
+  trailingSlash: 'always',
+  integrations: [sitemap()],
+  build: { inlineStylesheets: 'auto' },
+});

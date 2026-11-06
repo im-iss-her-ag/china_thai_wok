@@ -1,0 +1,11 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+import { site } from '../lib/site';
+---
+<LegalPage title={`Datenschutzerklärung – ${site.name}`} description={`Datenschutzerklärung von ${site.name} in ${site.city}.`}>
+  <Fragment slot="h1">Datenschutz</Fragment>
+  <!-- TODO: Den vorhandenen Datenschutz-Text hier einsetzen.
+       Bitte darin erwähnen: Hosting bei Cloudflare Pages, Google Maps (erst nach Klick geladen),
+       Schriften lokal eingebunden, keine Cookies/kein Tracking. -->
+  <p class="todo">Platzhalter – die vollständige Datenschutzerklärung wird hier eingefügt.</p>
+</LegalPage>

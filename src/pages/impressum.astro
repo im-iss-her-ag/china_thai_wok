@@ -1,0 +1,13 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+import { site, R } from '../lib/site';
+---
+<LegalPage title={`Impressum – ${site.name}`} description={`Impressum von ${site.name}, ${site.street}, ${site.zip} ${site.city}.`}>
+  <Fragment slot="h1">Impressum</Fragment>
+  <!-- TODO: Den vorhandenen Impressum-Text hier einsetzen (ersetzt den Block unten). -->
+  <p class="todo">Platzhalter – der vollständige Impressum-Text wird hier eingefügt.</p>
+  <h2>Angaben gemäß § 5 DDG</h2>
+  <p>{site.name}<br />Inhaber: {R.owner}<br />{site.street}<br />{site.zip} {site.city}</p>
+  <h2>Kontakt</h2>
+  <p>Telefon: <a href={site.tel}>{site.phone}</a></p>
+</LegalPage>
