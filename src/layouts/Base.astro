@@ -80,8 +80,9 @@ const year = new Date().getFullYear();
 
   {page === 'home' && (
     <div class="curtain" id="curtain" aria-hidden="true" hidden>
-      <i></i><i></i>
-      <div class="cmark"><div><b><span>{site.name}</span></b><small>{site.city.toUpperCase()}</small></div></div>
+      <span class="door l"></span><span class="door r"></span>
+      <span class="seam"></span>
+      <div class="cmark"><div><b><span>{site.name}</span></b><i class="cline"></i><small>{site.city}</small></div></div>
     </div>
   )}
 

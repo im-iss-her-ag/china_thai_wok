@@ -12,13 +12,11 @@ try { seen = sessionStorage.getItem('ctw-intro') === '1'; sessionStorage.setItem
 if (curtain && !seen && !reduce) {
   curtain.hidden = false;
   body.classList.add('lock', 'intro');
-  const go = () => {
-    curtain.classList.add('open');
-    setTimeout(() => { body.classList.remove('lock'); body.classList.add('ready'); }, 1300);
-    setTimeout(() => curtain.remove(), 2400);
-  };
-  document.readyState === 'complete' ? go() : addEventListener('load', go, { once: true });
-  setTimeout(() => !curtain.classList.contains('open') && go(), 2500);
+  // 1) Logo-Phase (CSS, ~0,9 s)  2) Türen öffnen (1,1 s)  3) aufräumen
+  requestAnimationFrame(() => curtain.classList.add('play'));
+  setTimeout(() => curtain.classList.add('open'), 950);
+  setTimeout(() => { body.classList.remove('lock'); body.classList.add('ready'); }, 1500);
+  setTimeout(() => curtain.remove(), 2300);
 } else {
   curtain?.remove();
   requestAnimationFrame(() => body.classList.add('ready'));
