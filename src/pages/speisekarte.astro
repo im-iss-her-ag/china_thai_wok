@@ -30,6 +30,15 @@ const shortAll: Record<string, string> = { e: 'Gluten', g: 'Soja', k: 'Sesam' };
 const cardAll = (d: { allergens: string[] }) => d.allergens.map((k) => shortAll[k] ?? allergens[k]).filter(Boolean).join(', ');
 const cardAdd = (d: { additives: string[] }) => additiveNames(d).join(', ').replace('Geschmacksverstärker', 'Geschmacks\u00ADverstärker').replace('Konservierungsstoff', 'Konservierungs\u00ADstoff');
 const catTitle = (n: string) => n.replace(/\s*\(.*\)$/, '');
+/* Übersicht: je Kategorie Bild (erstes Gericht mit Foto), Anzahl, Preis ab */
+const overview = categories.map((c) => {
+  const withPic = c.items.find((d) => pics[dishKey(d)]);
+  return {
+    id: c.id, name: shortName[c.id] ?? catTitle(c.name), n: c.items.length,
+    from: euro(Math.min(...c.items.map((d) => d.price))),
+    img: withPic ? pics[dishKey(withPic)].thumb : null,
+  };
+});
 const sideNote = 'Mit Reis – oder mit gebratenen Nudeln (+3,00 €)';
 /* Codes wie "1,4,7,c,e,g" → lesbarer Text (Allergene · Zusatzstoffe) */
 const splitCodes = (codes: string | null | undefined) => (codes ?? '').split(',').map((x) => x.trim()).filter(Boolean);
@@ -133,6 +142,17 @@ const crumbs = {
   </nav>
 
   <div class="wrap" id="menu">
+    <section class="ov" id="uebersicht" aria-labelledby="ovH">
+      <div class="ov-head"><h2 id="ovH">Auf einen Blick</h2><p>{categories.length} Kategorien – tippen Sie auf eine, um direkt dorthin zu springen.</p></div>
+      <ul class="ov-grid">
+        {overview.map((o) => (
+          <li><a class="ov-tile" href={`#${o.id}`}>
+            <span class="ov-img" aria-hidden="true">{o.img && <img src={o.img} alt="" width="200" height="200" loading="lazy" decoding="async" />}</span>
+            <span class="ov-txt"><b>{o.name}</b><small>{o.n} {o.n === 1 ? 'Gericht' : 'Gerichte'}<span class="sep"> · </span><span class="fr">ab {o.from}</span></small></span>
+          </a></li>
+        ))}
+      </ul>
+    </section>
     <div class="tools">
       <label class="srch"><svg aria-hidden="true"><use href="#i-search" /></svg><span class="sr-only">Gericht suchen</span><input id="q" type="search" placeholder="Gericht oder Nummer suchen…" autocomplete="off" /></label>
       <div class="tgls" role="group" aria-label="Filter">
@@ -216,6 +236,8 @@ const crumbs = {
   </div>
 
   <script type="application/json" id="dishData" set:html={JSON.stringify(sheetData)} />
+  <a class="to-ov" id="toOv" href="#uebersicht" aria-label="Zur Übersicht der Kategorien"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span>Übersicht</span></a>
+
   <div class="sheet" id="sheet" hidden>
     <div class="sheet-bg" data-close></div>
     <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="shName">

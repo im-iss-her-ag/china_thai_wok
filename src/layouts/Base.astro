@@ -38,8 +38,8 @@ const restaurant = {
   sameAs: [social.googleUrl, social.instagram].filter(Boolean),
 };
 const nav = [
-  { href: '/', t: 'Startseite', key: 'home' },
-  { href: '/speisekarte/', t: 'Speisekarte', key: 'menu' },
+  { href: '/', t: 'Startseite', s: 'Start', key: 'home' },
+  { href: '/speisekarte/', t: 'Speisekarte', s: 'Speisekarte', key: 'menu' },
 ];
 const year = new Date().getFullYear();
 ---
@@ -93,21 +93,12 @@ const year = new Date().getFullYear();
     <div class="wrap">
       <a class="brand" href="/" aria-label={`${site.name}, ${site.street}, ${site.city} – Startseite`}><span class="bn">{site.name}</span><small>{site.street} · {site.city}</small></a>
       <nav aria-label="Hauptnavigation">
-        {nav.map((n) => <a href={n.href} aria-current={page === n.key ? 'page' : undefined}><span data-t={n.t}>{n.t}</span></a>)}
+        {nav.map((n) => <a href={n.href} aria-current={page === n.key ? 'page' : undefined}><span class="l" data-t={n.t}>{n.t}</span><span class="m">{n.s}</span></a>)}
       </nav>
       <span class="ost hdr-ost" data-open-status hidden><i></i><span data-t></span></span>
       <a class="btn call" href={site.tel} data-mag><span>{site.phone}</span><span class="ic"><svg><use href="#i-phone" /></svg></span><span class="sr-only">Anrufen</span></a>
-      <button class="menu-btn" id="menuOpen" aria-label="Menü öffnen" aria-controls="mnav" aria-expanded="false"><svg><use href="#i-menu" /></svg></button>
     </div>
   </header>
-  <div class="mnav" id="mnav" aria-hidden="true">
-    <button class="close" id="menuClose" aria-label="Menü schließen"><svg width="20" height="20"><use href="#i-close" /></svg></button>
-    {nav.map((n) => <a class="big" href={n.href}>{n.t}</a>)}
-    <a class="big c-gold" href={site.tel}>{site.phone}</a>
-    <span class="ost" data-open-status hidden><i></i><span data-t></span></span>
-    <p>Di – So · 10:30 – 15:00 · 17:00 – 21:30<br />{site.street}, {site.zip} {site.city}</p>
-    <p class="mnav-legal"><a href="/impressum/">Impressum</a><a href="/datenschutz/">Datenschutz</a></p>
-  </div>
 
   <main id="main">
     {notice && <div class="notice" role="status"><b>Hinweis</b>{notice}</div>}
@@ -130,10 +121,6 @@ const year = new Date().getFullYear();
     </div>
   </footer>
 
-  <nav class="mbar" id="mbar" aria-label="Schnellzugriff">
-    <a href="/speisekarte/"><svg aria-hidden="true"><use href="#i-bowl" /></svg>Speisekarte</a>
-    <a class="call" href={site.tel}><svg aria-hidden="true"><use href="#i-phone" /></svg>Anrufen</a>
-  </nav>
 
   <script>
     import '../scripts/main.ts';

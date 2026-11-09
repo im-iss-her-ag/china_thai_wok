@@ -7,6 +7,16 @@ const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
 const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const body = document.body;
 
+/* Stabile Viewporthöhe für Scroll-Rechnungen: innerHeight springt am Handy, sobald die Browserleiste
+   ein-/ausblendet → Animationen & Header würden ruckeln. Wir messen 100lvh (wie die CSS-Pins) und
+   aktualisieren nur, wenn sich die Breite ändert (Drehen, Fenstergröße) – nicht bei der Leiste. */
+const vhProbe = document.createElement('div');
+vhProbe.style.cssText = 'position:absolute;top:0;left:0;width:0;height:calc(100 * var(--lv));visibility:hidden;pointer-events:none';
+body.appendChild(vhProbe);
+let VH = vhProbe.offsetHeight || innerHeight;
+let lastW = innerWidth;
+addEventListener('resize', () => { if (innerWidth !== lastW) { lastW = innerWidth; VH = vhProbe.offsetHeight || innerHeight; } });
+
 /* ---------- Intro curtain (1× pro Sitzung) ---------- */
 const curtain = $('#curtain');
 let seen = false;
@@ -27,36 +37,19 @@ if (curtain && !seen && !reduce) {
 /* ---------- Header ---------- */
 const hdr = $('#hdr')!;
 let lastY = scrollY;
+let hidden = false;
 const onHeader = () => {
-  const y = scrollY;
+  const y = Math.min(Math.max(scrollY, 0), Math.max(0, document.documentElement.scrollHeight - innerHeight));
   hdr.classList.toggle('solid', y > 40);
-  const hide = y > 400 && y > lastY && !body.classList.contains('menu-open');
-  hdr.classList.toggle('hide', hide);
-  body.classList.toggle('hdr-on', !hide);
+  const d = y - lastY;
+  if (Math.abs(d) < 12) return; // kleine Zuckungen (Leiste, Gummiband) ignorieren
+  hidden = y > 400 && d > 0;
+  hdr.classList.toggle('hide', hidden);
+  body.classList.toggle('hdr-on', !hidden);
   lastY = y;
 };
 addEventListener('scroll', onHeader, { passive: true });
 onHeader();
-
-/* ---------- Mobile Aktionsleiste ---------- */
-const mbar = $('#mbar');
-const foot = $('.foot');
-// (Sichtbarkeit wird unten im gemeinsamen rAF-Scroll-Takt berechnet)
-
-/* ---------- Mobile menu ---------- */
-const mnav = $('#mnav')!, openBtn = $('#menuOpen')!, closeBtn = $('#menuClose')!;
-const setMenu = (open: boolean) => {
-  mnav.classList.toggle('open', open);
-  mnav.setAttribute('aria-hidden', String(!open));
-  openBtn.setAttribute('aria-expanded', String(open));
-  body.classList.toggle('lock', open);
-  body.classList.toggle('menu-open', open);
-  if (open) closeBtn.focus();
-};
-openBtn.addEventListener('click', () => setMenu(true));
-closeBtn.addEventListener('click', () => setMenu(false));
-$$('a', mnav).forEach((a) => a.addEventListener('click', () => setMenu(false)));
-addEventListener('keydown', (e) => e.key === 'Escape' && setMenu(false));
 
 /* ---------- Cursor & magnetic ---------- */
 if (fine && !reduce) {
@@ -121,7 +114,7 @@ $$('[data-words]').forEach((stmt) => {
   const words = $$('.w', stmt);
   scrollers.push(() => {
     const r = stmt.getBoundingClientRect();
-    const p = clamp((innerHeight * 0.85 - r.top) / (r.height + innerHeight * 0.3));
+    const p = clamp((VH * 0.85 - r.top) / (r.height + VH * 0.3));
     words.forEach((w, i) => w.classList.toggle('on', i / words.length < p));
   });
 });
@@ -132,14 +125,14 @@ if (burst && bpin) scrollers.push(() => {
   const r = burst.getBoundingClientRect();
   // startet schon, wenn die Sektion von unten ins Bild kommt (nicht erst beim Pinnen)
   // Start beim Hereinkommen, voll aufgefächert kurz nach dem Pinnen (≈ 0,3 Viewport), danach kurz halten
-  const t = reduce ? 1 : clamp((innerHeight * 0.9 - r.top) / (innerHeight * 1.2));
+  const t = reduce ? 1 : clamp((VH * 0.9 - r.top) / (VH * 1.2));
   const e = 1 - Math.pow(1 - t, 3);
   bpin.style.setProperty('--t', e.toFixed(4));
 });
 
 const zs = $('#zoom'), zp = $('#zpin');
 if (zs && zp) scrollers.push(() => {
-  const r = zs.getBoundingClientRect(), t = clamp(-r.top / (r.height - innerHeight));
+  const r = zs.getBoundingClientRect(), t = clamp(-r.top / (r.height - VH));
   zp.style.setProperty('--r', 14 + t * t * 80 + '%');
   zp.style.setProperty('--s', String(1.3 - t * 0.3));
   zp.style.setProperty('--po', String(clamp(1 - t * 3)));
@@ -147,10 +140,52 @@ if (zs && zp) scrollers.push(() => {
 });
 
 const hs = $('#signature'), track = $('#track'), prog = $('#prog');
+const hcards = $$('.hcard', hs ?? document), hsNo = $('#hsNo');
+const isMob = () => innerWidth <= 860;
+/* Mobil: „Drehteller“ läuft von selbst (kein Scroll-Pinning) – jede Sekunde nächstes Gericht, Wischen möglich */
+const placeCards = (f: number) => {
+  hcards.forEach((c, i) => {
+    const d = i - f, a = Math.min(Math.abs(d), 1.5);
+    c.style.transform = `translate3d(calc(-50% + ${(d * 64).toFixed(2)}vw),${(a * a * 18).toFixed(1)}px,0) rotate(${(d * 12).toFixed(2)}deg) scale(${(1 - Math.min(a, 1) * 0.3).toFixed(3)})`;
+    c.style.opacity = String(clamp(1 - (a - 0.6) * 1.1));
+    c.style.zIndex = String(10 - Math.round(a * 4));
+    c.style.setProperty('--tv', clamp(1 - a * 2.4).toFixed(3));
+    c.style.setProperty('--spin', (d * -110).toFixed(1) + 'deg');
+  });
+};
+if (hs && prog && hcards.length && !reduce) {
+  const n = hcards.length;
+  let cur = 0, f = 0, from = 0, t0 = 0, anim = 0, timer = 0, visible = false, paused = 0;
+  const ease = (x: number) => 1 - Math.pow(1 - x, 4);
+  const show = () => { if (hsNo) hsNo.textContent = String(cur + 1).padStart(2, '0'); prog.style.width = ((cur + 1) / n) * 100 + '%'; };
+  const go = (to: number) => {
+    if (!isMob()) return;
+    // weich umlaufen: vom letzten zum ersten über die Gegenrichtung ohne Sprung
+    cur = (to + n) % n; from = f; t0 = performance.now(); cancelAnimationFrame(anim);
+    const target = cur;
+    const step = (now: number) => {
+      const k = clamp((now - t0) / 550);
+      f = from + (target - from) * ease(k); placeCards(f);
+      if (k < 1) anim = requestAnimationFrame(step);
+    };
+    anim = requestAnimationFrame(step); show();
+  };
+  const loop = () => { clearTimeout(timer); timer = window.setTimeout(() => { if (visible && isMob() && performance.now() > paused) go(cur + 1); loop(); }, 1000); };
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0.35 }).observe(hs);
+  let sx = 0, sy = 0;
+  hs.addEventListener('touchstart', (e) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  hs.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) { paused = performance.now() + 6000; go(cur + (dx < 0 ? 1 : -1)); }
+  }, { passive: true });
+  if (isMob()) { placeCards(0); show(); }
+  addEventListener('resize', () => { if (isMob()) placeCards(f); else hcards.forEach((c) => c.removeAttribute('style')); });
+  loop();
+}
 if (hs && track && prog) scrollers.push(() => {
-  if (innerWidth <= 860) return;
+  if (isMob()) return;
   const r = hs.getBoundingClientRect(), max = track.scrollWidth - innerWidth;
-  const t = clamp(-r.top / (r.height - innerHeight));
+  const t = clamp(-r.top / (r.height - VH));
   track.style.transform = `translateX(${-t * max}px)`;
   prog.style.width = t * 100 + '%';
 });
@@ -158,14 +193,8 @@ if (hs && track && prog) scrollers.push(() => {
 // Parallax: erst alle Positionen lesen, dann schreiben (kein Layout-Thrashing). Rechnung wie bisher.
 const pars = $$('[data-par]');
 if (pars.length && !reduce) scrollers.push(() => {
-  const ys = pars.map((el) => { const r = el.getBoundingClientRect(); return r.top + r.height / 2 - innerHeight / 2; });
+  const ys = pars.map((el) => { const r = el.getBoundingClientRect(); return r.top + r.height / 2 - VH / 2; });
   pars.forEach((el, i) => { el.style.transform = `translate3d(0,${(ys[i] * +el.dataset.par!).toFixed(1)}px,0)`; });
-});
-
-// Mobile Aktionsleiste über denselben rAF-Takt statt eigenem Scroll-Listener
-if (mbar) scrollers.push(() => {
-  const nearFoot = foot ? foot.getBoundingClientRect().top < innerHeight * 0.6 : false;
-  mbar.classList.toggle('show', scrollY > 300 && !nearFoot);
 });
 
 if (scrollers.length) {
@@ -484,4 +513,27 @@ if (!reduce) {
     v.addEventListener('playing', () => v.classList.add('on'), { once: true });
     vio.observe(v);
   });
+}
+
+/* Speisekarte: Schnell-Button „Übersicht“ erscheint, sobald die Übersicht aus dem Bild ist */
+const ov = $('#uebersicht'), toOv = $('#toOv');
+if (ov && toOv) {
+  new IntersectionObserver(([e]) => toOv.classList.toggle('show', !e.isIntersecting && e.boundingClientRect.top < 0)).observe(ov);
+  const foot2 = $('.foot');
+  if (foot2) new IntersectionObserver(([e]) => toOv.classList.toggle('near-foot', e.isIntersecting)).observe(foot2);
+}
+
+/* Bewertungen (mobil als Wisch-Leiste): Punkte zeigen die aktuelle Karte */
+const rvList = $('.rv-list'), rvDots = $$('.rv-dots i');
+if (rvList && rvDots.length) {
+  let rvT = 0;
+  rvList.addEventListener('scroll', () => {
+    cancelAnimationFrame(rvT);
+    rvT = requestAnimationFrame(() => {
+      const cards = $$('.rv', rvList), x = rvList.scrollLeft + rvList.clientWidth / 2;
+      let best = 0, bd = Infinity;
+      cards.forEach((c, i) => { const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - x); if (d < bd) { bd = d; best = i; } });
+      rvDots.forEach((d, i) => d.classList.toggle('on', i === best));
+    });
+  }, { passive: true });
 }

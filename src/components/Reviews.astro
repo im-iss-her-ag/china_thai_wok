@@ -28,14 +28,15 @@ const fmt = (n: number) => n.toLocaleString('de-DE', { minimumFractionDigits: 1,
       <div class="rv-list">
         {social.reviews.map((r) => (
           <figure class="rv">
-            <svg class="rv-q" aria-hidden="true"><use href="#cl-c" /></svg>
+            <span class="rv-mark" aria-hidden="true">“</span>
             <div class="stars" role="img" aria-label={`${r.stars} von 5 Sternen`}>{stars(r.stars)}</div>
-            <blockquote><p>„{r.text}“</p></blockquote>
-            <figcaption><b>{r.name}</b><span>{r.tag ?? 'Google-Bewertung'}</span></figcaption>
+            <blockquote><p>{r.text}</p></blockquote>
+            <figcaption><span class="rv-av" aria-hidden="true">{r.name.charAt(0)}</span><span class="rv-who"><b>{r.name}</b><span>{r.tag ?? 'Google-Bewertung'}</span></span></figcaption>
           </figure>
         ))}
       </div>
     )}
+    {social.reviews.length > 1 && <div class="rv-dots" aria-hidden="true">{social.reviews.map((_, i) => <i class={i === 0 ? 'on' : ''}></i>)}</div>}
     <div class="btn-row">
       <a class="btn dark" href={social.googleUrl} target="_blank" rel="noopener"><span>Alle Bewertungen</span><span class="ic"><svg><use href="#i-arrow" /></svg></span></a>
       {social.instagram && <a class="btn ghost" href={social.instagram} target="_blank" rel="noopener">Instagram</a>}

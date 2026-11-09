@@ -174,7 +174,7 @@ const desc = `${site.name} in ${site.city}: chinesische & thailändische Küche 
   </section>
 
   <!-- SIGNATURE -->
-  <section class="hscroll" id="signature" aria-labelledby="sigH">
+  <section class="hscroll" id="signature" aria-labelledby="sigH" style={`--n:${signature.length}`}>
     <div class="pin">
       <div class="track" id="track">
         <div class="intro"><span class="kicker c-gold">03 — Empfehlungen</span><h2 class="d1 mt-22" id="sigH">Die <span class="it">Lieblinge</span> des Hauses.</h2><p class="muted mt-22">Eine kleine Auswahl – die ganze Karte mit {dishCount} Gerichten finden Sie in der Speisekarte.</p></div>
@@ -189,6 +189,7 @@ const desc = `${site.name} in ${site.city}: chinesische & thailändische Küche 
         ))}
         <div class="hs-end" aria-hidden="true"></div>
       </div>
+      <div class="hs-count" aria-hidden="true"><b id="hsNo">01</b> / {String(signature.length).padStart(2, "0")}</div>
       <div class="progress" aria-hidden="true"><i id="prog"></i></div>
     </div>
   </section>
@@ -256,7 +257,7 @@ const desc = `${site.name} in ${site.city}: chinesische & thailändische Küche 
           </dl>
           <a class="btn dark" href={site.tel} data-mag><span>{site.phone}</span><span class="ic"><svg><use href="#i-phone" /></svg></span></a>
         </div>
-        <div class="stub"><span class="kicker center">ab</span><b>{site.delivery.promoFrom}&nbsp;€</b><span class="fw-7">1 Flasche Wein<br />gratis</span></div>
+        <div class="stub"><span class="kicker center">ab</span><b>{site.delivery.promoFrom}&nbsp;€</b><span class="fw-7">1 Flasche Wein <br />gratis</span></div>
       </div>
       <div class="clock" data-rv>
         <span class="st" id="st" data-open-status hidden><i></i><span data-t></span></span>
