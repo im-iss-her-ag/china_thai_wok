@@ -100,7 +100,7 @@ img{display:block;max-width:100%}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* ===== HERO ===== */
-.hero{position:relative;min-height:100svh;background:var(--jade);color:var(--rice);overflow:hidden;display:flex;flex-direction:column;--cl-bg:var(--jade)}
+.hero{position:relative;min-height:calc(100 * var(--sv));background:var(--jade);color:var(--rice);overflow:hidden;display:flex;flex-direction:column;--cl-bg:var(--jade)}
 .hero .body{flex:1;display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:center;padding-top:130px;padding-bottom:40px;position:relative;z-index:4}
 .hero h1{font:800 clamp(60px,9.4vw,164px)/.88 var(--font);letter-spacing:-.055em}
 .hero h1 .g{color:var(--gold)}

@@ -13,9 +13,21 @@ const body = document.body;
 const vhProbe = document.createElement('div');
 vhProbe.style.cssText = 'position:absolute;top:0;left:0;width:0;height:calc(100 * var(--lv));visibility:hidden;pointer-events:none';
 body.appendChild(vhProbe);
-let VH = vhProbe.offsetHeight || innerHeight;
+/* Viewport-Einheiten EINFRIEREN: In-App-Browser (Messenger, Instagram …) verkleinern beim Scrollen den ganzen
+   WebView → dort ändern sich sogar svh/lvh, die Startseite (viele vh-Abschnitte) wird länger/kürzer und springt
+   (iOS hat kein Scroll-Anchoring). Darum: einmal messen, als px in --sv/--lv setzen, nur bei Breitenänderung neu. */
+const root = document.documentElement;
+let VH = innerHeight;
+const freezeVH = () => {
+  root.style.removeProperty('--lv'); root.style.removeProperty('--sv');
+  const lv = vhProbe.offsetHeight || innerHeight, sv = Math.min(innerHeight, lv);
+  root.style.setProperty('--lv', lv / 100 + 'px');
+  root.style.setProperty('--sv', sv / 100 + 'px');
+  VH = lv;
+};
+freezeVH();
 let lastW = innerWidth;
-addEventListener('resize', () => { if (innerWidth !== lastW) { lastW = innerWidth; VH = vhProbe.offsetHeight || innerHeight; } });
+addEventListener('resize', () => { if (innerWidth !== lastW) { lastW = innerWidth; freezeVH(); } });
 
 /* ---------- Intro curtain (1× pro Sitzung) ---------- */
 const curtain = $('#curtain');
