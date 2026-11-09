@@ -1123,7 +1123,9 @@ body.lock .to-ov{opacity:0;pointer-events:none}
   .sheet-panel{overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch}
 }
 /* Performance Speisekarte: Kategorien außerhalb des Bildschirms nicht layouten/malen (143 Karten) */
-.mcat{content-visibility:auto;contain-intrinsic-size:auto 1400px}
-@media(max-width:700px){.mcat{contain-intrinsic-size:auto 1800px}}
-/* Performance Startseite: Abschnitte ohne Pinning erst rendern, wenn sie in die Nähe kommen */
-.features,.reviews,#info,.sec-stats{content-visibility:auto;contain-intrinsic-size:auto 1200px}
+/* NUR in Browsern mit Scroll-Anchoring (Chrome/Android). Safari/iOS (inkl. In-App-Browser) hat keins:
+   dort ändern sich beim Ein-/Ausblenden der Browserleiste die Platzhalterhöhen → Seite springt um ~1000px. */
+@supports (overflow-anchor:auto){
+  .mcat{content-visibility:auto;contain-intrinsic-size:auto 1400px}
+  @media(max-width:700px){.mcat{contain-intrinsic-size:auto 1800px}}
+}
