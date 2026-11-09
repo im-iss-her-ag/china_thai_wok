@@ -6,7 +6,7 @@ const { title, description } = Astro.props;
 <Base title={title} description={description} page="legal">
   <section class="pagehero small">
     <svg class="cloud drift" aria-hidden="true"><use href="#cl-a" /></svg>
-    <div class="wrap"><span class="kicker" style="color:var(--gold)">Rechtliches</span><h1><slot name="h1" /></h1></div>
+    <div class="wrap"><span class="kicker c-gold">Rechtliches</span><h1><slot name="h1" /></h1></div>
   </section>
-  <div class="wrap"><article class="legal"><slot /></article></div>
+  <div class="wrap"><article class="legal"><slot /><svg class="orn ink" aria-hidden="true"><use href="#orn" /></svg></article></div>
 </Base>

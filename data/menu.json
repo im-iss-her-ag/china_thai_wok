@@ -173,7 +173,7 @@
             "j",
             "k"
           ],
-          "price": 4.9,
+          "price": 5.4,
           "spicy": "scharf",
           "vegetarian": false
         },
@@ -192,7 +192,7 @@
             "f",
             "j"
           ],
-          "price": 5.9,
+          "price": 4.9,
           "spicy": "scharf",
           "vegetarian": false
         },
@@ -640,7 +640,7 @@
           ],
           "price": 9.5,
           "spicy": null,
-          "vegetarian": true
+          "vegetarian": false
         },
         {
           "nr": "32",
@@ -775,7 +775,7 @@
           ],
           "price": 9.2,
           "spicy": null,
-          "vegetarian": true
+          "vegetarian": false
         },
         {
           "nr": "35B",
@@ -806,7 +806,7 @@
           ],
           "price": 9.8,
           "spicy": "scharf",
-          "vegetarian": true
+          "vegetarian": false
         },
         {
           "nr": "35E",
@@ -838,7 +838,7 @@
           ],
           "price": 9.9,
           "spicy": null,
-          "vegetarian": true
+          "vegetarian": false
         },
         {
           "nr": "37",
@@ -2181,7 +2181,7 @@
           ],
           "price": 10.2,
           "spicy": "scharf",
-          "vegetarian": true
+          "vegetarian": false
         },
         {
           "nr": "T2",
@@ -2364,7 +2364,7 @@
           ],
           "price": 9.5,
           "spicy": null,
-          "vegetarian": true
+          "vegetarian": false
         },
         {
           "nr": "U2",
@@ -2480,7 +2480,7 @@
           ],
           "price": 2.5,
           "spicy": null,
-          "vegetarian": true
+          "vegetarian": false
         },
         {
           "nr": null,
@@ -2557,7 +2557,9 @@
           "name": "Gebackene Banane mit Honig",
           "description": null,
           "additives": [],
-          "allergens": [],
+          "allergens": [
+            "e"
+          ],
           "price": 4.0,
           "spicy": null,
           "vegetarian": true
@@ -2567,7 +2569,9 @@
           "name": "Gebackene Ananas mit Honig",
           "description": null,
           "additives": [],
-          "allergens": [],
+          "allergens": [
+            "e"
+          ],
           "price": 4.0,
           "spicy": null,
           "vegetarian": true
@@ -2633,9 +2637,10 @@
     "Nummern fehlen im Flyer: 17, 27, 35D, 38, 51B, 61B, 81B, 86B, 98-100A, U4, U7, T6, T10, Soße D",
     "Tom Ka Gai/Gung: 'j' steht vor 'scharf' – als Allergen j übernommen",
     "50A Code 'c.e' als Tippfehler für 'c,e' gelesen; 87/88 'jscharf'/'kscharf' getrennt",
-    "Nachspeisen 'Honige' -> 'Honig' korrigiert",
-    "Krabbenchips, Nachspeisen, Getränke ohne Kennzeichnung",
+    "Nachspeisen: hochgestelltes 'e' bei 'Honig' = Allergen e (Glutenhaltiges Getreide)",
+    "Krabbenchips, Getränke ohne Kennzeichnung",
     "89A: Allergene je nach gewählter Soße",
-    "Preise Vorspeisen aus Spaltenzuordnung (Layout) abgeleitet"
+    "Preise Vorspeisen am Flyer-Bild geprüft (4 = 5,40 €, 5 = 4,90 €)",
+    "Vegetarisch nicht gesetzt bei Fisch/Weichtieren/Krebstieren (b/c/d) und bei U1 (Soße nach Wahl)"
   ]
 }

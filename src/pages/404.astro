@@ -2,11 +2,11 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base title="Seite nicht gefunden – China-Thai-Wok" description="Diese Seite gibt es nicht." page="legal" noindex>
-  <section class="pagehero" style="min-height:80vh">
+  <section class="pagehero full">
     <svg class="cloud drift" aria-hidden="true"><use href="#cl-a" /></svg>
-    <div class="wrap"><span class="kicker" style="color:var(--gold)">Fehler 404</span><h1>Hier ist der <span class="it">Wok</span> leer.</h1>
+    <div class="wrap"><span class="kicker c-gold">Fehler 404</span><h1>Hier ist der <span class="it">Wok</span> leer.</h1>
       <p>Die Seite wurde nicht gefunden.</p>
-      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:34px"><a class="btn" href="/"><span>Startseite</span><span class="ic"><svg><use href="#i-arrow" /></svg></span></a><a class="btn ghost" href="/speisekarte/" style="color:var(--rice)">Speisekarte</a></div>
+      <div class="btn-row"><a class="btn" href="/"><span>Startseite</span><span class="ic"><svg><use href="#i-arrow" /></svg></span></a><a class="btn ghost c-rice" href="/speisekarte/">Speisekarte</a></div>
     </div>
   </section>
 </Base>

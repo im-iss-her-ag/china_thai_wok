@@ -1,0 +1,44 @@
+---
+import { social } from '../lib/site';
+
+// Ausgeblendet, solange weder Gesamtwertung noch Zitate eingetragen sind (site.ts → social).
+const hasScore = social.rating !== null && social.count !== null;
+const show = hasScore || social.reviews.length > 0;
+const stars = (n: number) => '★'.repeat(Math.round(n)) + '☆'.repeat(5 - Math.round(n));
+const fmt = (n: number) => n.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+---
+{show && (
+  <section class="reviews" aria-labelledby="rvH"><div class="wrap">
+    <div class="rv-head">
+      <div>
+        <span class="kicker c-gold-ink">Gäste über uns</span>
+        <h2 class="d2 mt-14" id="rvH">Was unsere<br /><span class="it">Gäste sagen.</span></h2>
+      </div>
+      {hasScore && (
+        <div class="score">
+          <b>{fmt(social.rating!)}</b>
+          <div>
+            <div class="stars" aria-label={`${fmt(social.rating!)} von 5 Sternen`}>{stars(social.rating!)}</div>
+            <p class="muted">{social.count!.toLocaleString('de-DE')} Bewertungen auf Google</p>
+          </div>
+        </div>
+      )}
+    </div>
+    {social.reviews.length > 0 && (
+      <div class="rv-list">
+        {social.reviews.map((r) => (
+          <figure class="rv">
+            <svg class="rv-q" aria-hidden="true"><use href="#cl-c" /></svg>
+            <div class="stars" role="img" aria-label={`${r.stars} von 5 Sternen`}>{stars(r.stars)}</div>
+            <blockquote><p>„{r.text}“</p></blockquote>
+            <figcaption><b>{r.name}</b><span>{r.tag ?? 'Google-Bewertung'}</span></figcaption>
+          </figure>
+        ))}
+      </div>
+    )}
+    <div class="btn-row">
+      <a class="btn dark" href={social.googleUrl} target="_blank" rel="noopener"><span>Alle Bewertungen</span><span class="ic"><svg><use href="#i-arrow" /></svg></span></a>
+      {social.instagram && <a class="btn ghost" href={social.instagram} target="_blank" rel="noopener">Instagram</a>}
+    </div>
+  </div></section>
+)}

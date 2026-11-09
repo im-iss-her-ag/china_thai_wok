@@ -1,9 +1,12 @@
 ---
 import '../styles/global.css';
 import Sprite from '../components/Sprite.astro';
-import { site, notice, R } from '../lib/site';
+import { site, notice, R, social } from '../lib/site';
+import { SLOTS, OPEN_DAYS, SCHEMA_DAYS } from '../lib/hours';
 import { getImage } from 'astro:assets';
 import ogSrc from '../assets/images/hero-wok.jpg';
+// Hauptschrift vorladen → kein sichtbarer Schriftwechsel (FOUT) beim ersten Aufruf
+import fontUrl from '@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -31,10 +34,8 @@ const restaurant = {
   acceptsReservations: false,
   hasMenu: new URL('/speisekarte/', Astro.site).href,
   address: { '@type': 'PostalAddress', streetAddress: site.street, postalCode: site.zip, addressLocality: site.city, addressCountry: 'DE' },
-  openingHoursSpecification: [
-    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], opens: '10:30', closes: '15:00' },
-    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], opens: '17:00', closes: '21:30' },
-  ],
+  openingHoursSpecification: SLOTS.map((s) => ({ '@type': 'OpeningHoursSpecification', dayOfWeek: OPEN_DAYS.map((d) => SCHEMA_DAYS[d]), opens: s.from, closes: s.to })),
+  sameAs: [social.googleUrl, social.instagram].filter(Boolean),
 };
 const nav = [
   { href: '/', t: 'Startseite', key: 'home' },
@@ -52,6 +53,7 @@ const year = new Date().getFullYear();
   <link rel="canonical" href={canonical} />
   {noindex && <meta name="robots" content="noindex, follow" />}
   <meta name="theme-color" content="#0E2B25" />
+  <link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="sitemap" href="/sitemap-index.xml" />
   <meta property="og:type" content="restaurant" />
@@ -86,12 +88,14 @@ const year = new Date().getFullYear();
     </div>
   )}
 
+  <div class="sprog" aria-hidden="true"></div>
   <header class="hdr" id="hdr">
     <div class="wrap">
-      <a class="brand" href="/" aria-label={`${site.name} – Startseite`}><span class="slot" aria-hidden="true"><svg><use href="#i-bowl" /></svg></span>{site.name}</a>
+      <a class="brand" href="/" aria-label={`${site.name}, ${site.street}, ${site.city} – Startseite`}><span class="bn">{site.name}</span><small>{site.street} · {site.city}</small></a>
       <nav aria-label="Hauptnavigation">
         {nav.map((n) => <a href={n.href} aria-current={page === n.key ? 'page' : undefined}><span data-t={n.t}>{n.t}</span></a>)}
       </nav>
+      <span class="ost hdr-ost" data-open-status hidden><i></i><span data-t></span></span>
       <a class="btn call" href={site.tel} data-mag><span>{site.phone}</span><span class="ic"><svg><use href="#i-phone" /></svg></span><span class="sr-only">Anrufen</span></a>
       <button class="menu-btn" id="menuOpen" aria-label="Menü öffnen" aria-controls="mnav" aria-expanded="false"><svg><use href="#i-menu" /></svg></button>
     </div>
@@ -99,8 +103,10 @@ const year = new Date().getFullYear();
   <div class="mnav" id="mnav" aria-hidden="true">
     <button class="close" id="menuClose" aria-label="Menü schließen"><svg width="20" height="20"><use href="#i-close" /></svg></button>
     {nav.map((n) => <a class="big" href={n.href}>{n.t}</a>)}
-    <a class="big" style="color:var(--gold)" href={site.tel}>{site.phone}</a>
+    <a class="big c-gold" href={site.tel}>{site.phone}</a>
+    <span class="ost" data-open-status hidden><i></i><span data-t></span></span>
     <p>Di – So · 10:30 – 15:00 · 17:00 – 21:30<br />{site.street}, {site.zip} {site.city}</p>
+    <p class="mnav-legal"><a href="/impressum/">Impressum</a><a href="/datenschutz/">Datenschutz</a></p>
   </div>
 
   <main id="main">
@@ -109,14 +115,14 @@ const year = new Date().getFullYear();
   </main>
 
   <footer class="foot">
-    <svg class="cloud cl drift" style="left:-60px;bottom:250px" aria-hidden="true"><use href="#cl-a" /></svg>
-    <svg class="cloud cl drift r" style="right:-30px;top:280px;width:220px" aria-hidden="true"><use href="#cl-b" /></svg>
+    <svg class="cloud cl drift cl-fa" aria-hidden="true"><use href="#cl-a" /></svg>
+    <svg class="cloud cl drift r cl-fb" aria-hidden="true"><use href="#cl-b" /></svg>
     <div class="wrap">
-      <span class="kicker" style="color:var(--gold)">Hunger?</span>
+      <span class="kicker c-gold">Hunger?</span>
       <div class="cta"><a class="tel" href={site.tel} data-hover="ANRUFEN">{site.phone}</a><a class="btn" href="/speisekarte/" data-mag><span>Speisekarte</span><span class="ic"><svg><use href="#i-arrow" /></svg></span></a></div>
       <div class="cols">
-        <div><h2>Adresse</h2><p>{site.name}<br />{site.street}<br />{site.zip} {site.city}</p><p style="margin-top:10px"><a href={site.mapsUrl} target="_blank" rel="noopener" style="color:var(--gold)">Route planen →</a></p></div>
-        <div><h2>Öffnungszeiten</h2><p>Di – So · 10:30 – 15:00<br />und 17:00 – 21:30<br />Mo Ruhetag (an Feiertagen geöffnet)</p></div>
+        <div><h2>Adresse</h2><p>{site.name}<br />{site.street}<br />{site.zip} {site.city}</p><p class="foot-links"><a href={site.mapsUrl} target="_blank" rel="noopener">Route planen →</a><a href={social.googleUrl} target="_blank" rel="noopener">Google-Bewertungen →</a>{social.instagram && <a href={social.instagram} target="_blank" rel="noopener">Instagram →</a>}</p></div>
+        <div><h2>Öffnungszeiten</h2><p>Di – So · 10:30 – 15:00<br />und 17:00 – 21:30<br />Mo Ruhetag (an Feiertagen geöffnet)</p><span class="ost foot-ost" data-open-status hidden><i></i><span data-t></span></span><p class="foot-links"><a href={site.menuPdf} download>Speisekarte als PDF ↓</a></p></div>
         <div><h2>Lieferservice</h2><p>{site.delivery.hours}<br />Mindestbestellwert {site.delivery.min} € in {site.city}<br />ab {site.delivery.promoFrom} €: 1 Flasche Wein gratis</p></div>
       </div>
       <div class="word" aria-hidden="true">{site.name}</div>

@@ -1,6 +1,6 @@
 # Image Credits
 
-All images are placeholders from Pexels, free to use under the Pexels License. Photographer names are Pexels account handles.
+`gastraum.png` is an own photo of the restaurant (China-Thai-Wok). All other images are placeholders from Pexels, free to use under the Pexels License. Photographer names are Pexels account handles.
 
 | File | Photographer | Source | License |
 |---|---|---|---|

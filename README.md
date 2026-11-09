@@ -33,11 +33,14 @@ Ghi đè file trong `src/assets/images/` **giữ nguyên tên** (jpg/png/webp đ
 | dish-* | Món đặc trưng + ảnh danh mục trong Speisekarte |
 | bg-laternen | Nền cố định section "Über uns" |
 | party / dish-ente | 2 khối chữ trái – ảnh vuông phải |
-| interior-1 … interior-4 | Slider "Unser Restaurant" (tự chuyển 5s) |
+| gastraum (ảnh thật của quán) | Slide 1 "Unser Restaurant" + ảnh khối "Besuchen Sie uns" |
+| interior-4, party | Slide 2–3 "Unser Restaurant" (interior-1…3 không còn dùng – ảnh quán khác) |
 
 ## Sửa nội dung
 - Món / giá: `data/menu.json` (`"soldOut": true` → hiện "Heute aus").
 - Món đặc trưng: mảng `signature` trong `src/lib/site.ts`.
+- Đánh giá Google / Instagram: `social` trong `src/lib/site.ts` (trích nguyên văn, tên chỉ Vorname + chữ cái đầu họ).
+- Giờ mở cửa: `src/lib/hours.ts` (hiển thị, JSON-LD và badge "Jetzt geöffnet" đều đọc từ đây).
 - Thanh thông báo (vd. nghỉ lễ): `notice` trong `src/lib/site.ts`.
 - Impressum / Datenschutz: dán nội dung vào `src/pages/impressum.astro`, `src/pages/datenschutz.astro` (chỗ `TODO`).
 

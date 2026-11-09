@@ -1,13 +1,71 @@
 ---
 import LegalPage from '../components/LegalPage.astro';
-import { site, R } from '../lib/site';
+import { site, R, categories, dishKey } from '../lib/site';
+import creditsMd from '../assets/images/CREDITS.md?raw';
+
+// Bildnachweise aus CREDITS.md: | Datei | Fotograf | Quelle | Lizenz |
+const credits = creditsMd
+  .split('\n')
+  .map((l) => l.split('|').map((s) => s.trim()))
+  .filter((c) => c.length >= 5 && /^https?:\/\//.test(c[3]))
+  .map((c) => ({ by: c[2].replace(/\s*\(see source page\)/, ''), url: c[3] }));
+
+// Gerichtfotos der Speisekarte (Wikimedia Commons / Flickr via Openverse) – Lizenzangaben aus gerichte/credits.json
+type DishCredit = { title: string; creator: string; creator_url: string; page: string; license: string; license_url: string };
+const dishCreditFiles = import.meta.glob<{ default: Record<string, DishCredit> }>('../assets/images/gerichte/credits.json', { eager: true });
+const dishName: Record<string, string> = Object.fromEntries(categories.flatMap((c) => c.items.map((d) => [dishKey(d), (d.nr ? d.nr + ' ' : '') + d.name])));
+const dishCredits = Object.entries(Object.values(dishCreditFiles)[0]?.default ?? {})
+  .sort(([a], [b]) => a.localeCompare(b, 'de', { numeric: true }));
 ---
 <LegalPage title={`Impressum – ${site.name}`} description={`Impressum von ${site.name}, ${site.street}, ${site.zip} ${site.city}.`}>
   <Fragment slot="h1">Impressum</Fragment>
-  <!-- TODO: Den vorhandenen Impressum-Text hier einsetzen (ersetzt den Block unten). -->
-  <p class="todo">Platzhalter – der vollständige Impressum-Text wird hier eingefügt.</p>
+
   <h2>Angaben gemäß § 5 DDG</h2>
-  <p>{site.name}<br />Inhaber: {R.owner}<br />{site.street}<br />{site.zip} {site.city}</p>
+  <p>{site.name}<br />Inhaber: {R.owner}<br />{site.street}<br />{site.zip} {site.city}<br />Deutschland</p>
+
   <h2>Kontakt</h2>
-  <p>Telefon: <a href={site.tel}>{site.phone}</a></p>
+  <p>Telefon: <a href={site.tel}>{site.phone}</a><!-- <br />E-Mail: [E-Mail-Adresse] --></p>
+
+  <!-- Umsatzsteuer-ID – einblenden, sobald vorhanden:
+  <h2>Umsatzsteuer-ID</h2>
+  <p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG: [USt-IdNr.]</p>
+  -->
+
+  <h2>Verbraucherstreitbeilegung</h2>
+  <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+
+  <h2>Haftung für Inhalte</h2>
+  <p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p>
+  <p>Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden entsprechender Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.</p>
+
+  <h2>Haftung für Links</h2>
+  <p>Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber verantwortlich. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.</p>
+
+  <h2>Bildnachweise</h2>
+  <p>Foto des Gastraums: {site.name}. Alle übrigen Fotos auf dieser Website sind Symbolbilder und zeigen Serviervorschläge. Sie stammen von <a href="https://www.pexels.com" rel="noopener">Pexels</a> (<a href="https://www.pexels.com/license/" rel="noopener">Pexels-Lizenz</a>). Fotos von:
+    {credits.map((c, i) => <Fragment><a href={c.url} rel="noopener">{c.by}</a>{i < credits.length - 1 ? ', ' : '.'}</Fragment>)}
+  </p>
+  <h3 id="videonachweise">Videos</h3>
+  <p>Die Videos auf der Startseite sind Symbolaufnahmen aus <a href="https://commons.wikimedia.org" rel="noopener">Wikimedia Commons</a>; Ausschnitt, Länge und Größe wurden angepasst, Ton entfernt.</p>
+  <ul class="credits">
+    <li><b>Wok mit Flammen</b> – <a href="https://commons.wikimedia.org/wiki/File:Cuisine_au_wok_au_Sun_Sep_(Beynost).webm" rel="noopener nofollow">Cuisine au wok</a> von Benoît Prieur, <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.de" rel="noopener nofollow">CC0 1.0</a></li>
+    <li><b>Knusprige Ente</b> – <a href="https://commons.wikimedia.org/wiki/File:%E5%85%AD%E7%A6%8F%E8%90%AC%E6%80%A1%E9%85%92%E5%BA%97_%E7%B2%B5%E4%BA%AE_%E7%B2%B5%E5%BC%8F%E7%89%87%E7%9A%AE%E9%B4%A8.webm" rel="noopener nofollow">粵式片皮鴨</a> von <a href="https://www.youtube.com/user/gil5415" rel="noopener nofollow">麻吉小兔</a>, <a href="https://creativecommons.org/licenses/by/3.0/deed.de" rel="noopener nofollow">CC BY 3.0</a></li>
+    <li><b>Partyservice</b> – <a href="https://commons.wikimedia.org/wiki/File:%D0%9E%D0%B1%D0%B6%D0%B0%D1%80%D0%BA%D0%B0_%D0%B2_%D0%B2%D0%BE%D0%BA%D0%B5.webm" rel="noopener nofollow">Обжарка в воке</a> von <a href="https://commons.wikimedia.org/wiki/User:Pannet" rel="noopener nofollow">Pannet</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.de" rel="noopener nofollow">CC BY-SA 4.0</a></li>
+  </ul>
+  {dishCredits.length > 0 && (
+    <Fragment>
+      <h3 id="bildnachweise-speisekarte">Fotos der Speisekarte</h3>
+      <p>Die Gerichtfotos in der Speisekarte sind Symbolbilder. Sie stammen von Pexels, Wikimedia Commons bzw. Flickr und stehen unter den jeweils genannten Lizenzen; Bildgrößen und -ausschnitte wurden angepasst.</p>
+      <ul class="credits">
+        {dishCredits.map(([k, c]) => (
+          <li>
+            <b>{dishName[k] ?? k}</b>{' – '}
+            <a href={c.page} rel="noopener nofollow">{c.title || 'Foto'}</a>
+            {' von '}{c.creator_url ? <a href={c.creator_url} rel="noopener nofollow">{c.creator}</a> : c.creator}
+            {', '}{c.license_url ? <a href={c.license_url} rel="noopener nofollow">{c.license}</a> : c.license}
+          </li>
+        ))}
+      </ul>
+    </Fragment>
+  )}
 </LegalPage>

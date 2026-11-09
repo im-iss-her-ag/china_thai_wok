@@ -1,3 +1,5 @@
+import { berlinNow, openStatus, statusText } from '../lib/hours';
+
 const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector<T>(s);
 const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => [...r.querySelectorAll<T>(s)];
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -39,10 +41,7 @@ onHeader();
 /* ---------- Mobile Aktionsleiste ---------- */
 const mbar = $('#mbar');
 const foot = $('.foot');
-if (mbar) addEventListener('scroll', () => {
-  const nearFoot = foot ? foot.getBoundingClientRect().top < innerHeight * 0.6 : false;
-  mbar.classList.toggle('show', scrollY > 300 && !nearFoot);
-}, { passive: true });
+// (Sichtbarkeit wird unten im gemeinsamen rAF-Scroll-Takt berechnet)
 
 /* ---------- Mobile menu ---------- */
 const mnav = $('#mnav')!, openBtn = $('#menuOpen')!, closeBtn = $('#menuClose')!;
@@ -118,6 +117,7 @@ $$('[data-words]').forEach((stmt) => {
     });
   };
   walk(stmt);
+  // Bewusst scroll-gekoppelt (Design-Entscheidung): Wörter leuchten im Takt der Scrollbar auf.
   const words = $$('.w', stmt);
   scrollers.push(() => {
     const r = stmt.getBoundingClientRect();
@@ -155,11 +155,18 @@ if (hs && track && prog) scrollers.push(() => {
   prog.style.width = t * 100 + '%';
 });
 
+// Parallax: erst alle Positionen lesen, dann schreiben (kein Layout-Thrashing). Rechnung wie bisher.
 const pars = $$('[data-par]');
-if (pars.length && !reduce) scrollers.push(() => pars.forEach((el) => {
-  const r = el.getBoundingClientRect();
-  el.style.transform = `translateY(${(r.top + r.height / 2 - innerHeight / 2) * +el.dataset.par!}px)`;
-}));
+if (pars.length && !reduce) scrollers.push(() => {
+  const ys = pars.map((el) => { const r = el.getBoundingClientRect(); return r.top + r.height / 2 - innerHeight / 2; });
+  pars.forEach((el, i) => { el.style.transform = `translate3d(0,${(ys[i] * +el.dataset.par!).toFixed(1)}px,0)`; });
+});
+
+// Mobile Aktionsleiste über denselben rAF-Takt statt eigenem Scroll-Listener
+if (mbar) scrollers.push(() => {
+  const nearFoot = foot ? foot.getBoundingClientRect().top < innerHeight * 0.6 : false;
+  mbar.classList.toggle('show', scrollY > 300 && !nearFoot);
+});
 
 if (scrollers.length) {
   let ticking = false;
@@ -271,17 +278,21 @@ const co = new IntersectionObserver((es) => es.forEach((e) => {
 }), { threshold: 0.6 });
 $$('[data-count]').forEach((el) => co.observe(el));
 
-/* ---------- Öffnungsstatus (Europe/Berlin) ---------- */
-const st = $('#st');
-if (st) {
-  const parts = new Intl.DateTimeFormat('de-DE', { timeZone: 'Europe/Berlin', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date());
-  const wd = parts.find((p) => p.type === 'weekday')!.value.replace('.', '');
-  const m = +parts.find((p) => p.type === 'hour')!.value * 60 + +parts.find((p) => p.type === 'minute')!.value;
-  const days = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
-  $$('#days li')[days.indexOf(wd)]?.classList.add('now');
-  const open = wd !== 'Mo' && ((m >= 630 && m < 900) || (m >= 1020 && m < 1290));
-  if (!open) { st.classList.add('closed'); $('span', st)!.textContent = 'Gerade geschlossen'; }
-}
+/* ---------- Öffnungsstatus (Europe/Berlin), live jede Minute ---------- */
+const badges = $$('[data-open-status]');
+const days = $('#days');
+const paint = () => {
+  const [d, m] = berlinNow();
+  const s = openStatus(d, m), txt = statusText(s);
+  badges.forEach((b) => {
+    b.hidden = false;
+    b.classList.toggle('closed', !s.open);
+    b.classList.toggle('soon', s.open && s.soon);
+    const t = b.querySelector('[data-t]'); if (t) t.textContent = txt;
+  });
+  if (days) $$('li', days).forEach((li, i) => li.classList.toggle('now', i === d));
+};
+if (badges.length || days) { paint(); setInterval(paint, 60_000); }
 
 /* ---------- Karte erst nach Klick (DSGVO) ---------- */
 $('#mapLoad')?.addEventListener('click', (e) => {
@@ -294,36 +305,64 @@ $('#mapLoad')?.addEventListener('click', (e) => {
 /* ---------- Speisekarte ---------- */
 const menu = $('#menu');
 if (menu) {
-  const dishes = $$('.dish', menu), cats = $$('.mcat', menu), chips = $$<HTMLAnchorElement>('.chip');
+  const dishes = $$('.dcard', menu), cats = $$('.mcat', menu);
   const q = $<HTMLInputElement>('#q')!, tV = $('#tV')!, tH = $('#tH')!, empty = $('#empty')!;
+
+  /* Filter & Suche */
   const filt = () => {
     const s = q.value.trim().toLowerCase(), v = tV.getAttribute('aria-pressed') === 'true', h = tH.getAttribute('aria-pressed') === 'true';
-    dishes.forEach((d) => {
-      const ok = (!v || d.dataset.v === '1') && (!h || d.dataset.h === '1') && (!s || d.dataset.s!.includes(s));
-      d.hidden = !ok;
-    });
+    dishes.forEach((d) => { d.hidden = !((!v || d.dataset.v === '1') && (!h || d.dataset.h === '1') && (!s || d.dataset.s!.includes(s))); });
     let any = false;
-    cats.forEach((c) => { const vis = $$('.dish', c).some((d) => !d.hidden); c.hidden = !vis; any ||= vis; });
+    cats.forEach((c) => { const vis = $$('.dcard', c).some((d) => !d.hidden); c.hidden = !vis; any ||= vis; });
     empty.style.display = any ? 'none' : 'block';
+    links.forEach((a) => { a.hidden = !!$(a.hash)?.hidden; });
+    moveInd();
   };
   q.addEventListener('input', filt);
   [tV, tH].forEach((b) => b.addEventListener('click', () => { b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); filt(); }));
 
-  // Scrollspy
-  const bar = $('.catbar .wrap')!;
+  /* Kategorien-Navigation: Indikator (nur transform), Scrollspy, Pfeile, Sticky-Status */
+  const nav = $('#catnav')!, track = $('#cnTrack')!, ind = $('#cnInd')!;
+  const links = $$<HTMLAnchorElement>('.cn-link', track);
+  let active = links[0];
+  const moveInd = () => {
+    if (!active || active.hidden) { ind.style.opacity = '0'; return; }
+    ind.style.opacity = '1';
+    ind.style.transform = `translateX(${active.offsetLeft}px) scaleX(${active.offsetWidth / 100})`;
+  };
+  const setActive = (a: HTMLAnchorElement) => {
+    if (a === active) return;
+    active?.classList.remove('on'); active?.removeAttribute('aria-current');
+    active = a; a.classList.add('on'); a.setAttribute('aria-current', 'true');
+    moveInd();
+    // nur scrollen, wenn der aktive Tab nicht vollständig sichtbar ist
+    const l = a.offsetLeft, r = l + a.offsetWidth, vl = track.scrollLeft, vr = vl + track.clientWidth;
+    if (l < vl + 24 || r > vr - 24) track.scrollTo({ left: l - track.clientWidth / 2 + a.offsetWidth / 2, behavior: reduce ? 'auto' : 'smooth' });
+  };
   const spy = new IntersectionObserver((es) => es.forEach((e) => {
     if (!e.isIntersecting) return;
-    chips.forEach((c) => {
-      const on = c.hash === '#' + e.target.id;
-      c.classList.toggle('on', on);
-      if (on) bar.scrollTo({ left: c.offsetLeft - 40, behavior: reduce ? 'auto' : 'smooth' });
-    });
-  }), { rootMargin: '-40% 0px -55% 0px' });
+    const a = links.find((x) => x.hash === '#' + e.target.id);
+    if (a) setActive(a);
+  }), { rootMargin: '-35% 0px -60% 0px' });
   cats.forEach((c) => spy.observe(c));
+  links.forEach((a) => a.addEventListener('click', () => setActive(a)));
+  $$('.cn-arr', nav).forEach((b) => b.addEventListener('click', () => {
+    track.scrollBy({ left: (b.classList.contains('l') ? -1 : 1) * track.clientWidth * 0.7, behavior: reduce ? 'auto' : 'smooth' });
+  }));
+  const edges = () => {
+    nav.classList.toggle('can-l', track.scrollLeft > 4);
+    nav.classList.toggle('can-r', track.scrollLeft + track.clientWidth < track.scrollWidth - 4);
+  };
+  track.addEventListener('scroll', edges, { passive: true });
+  addEventListener('resize', () => { edges(); moveInd(); });
+  edges(); moveInd();
+  // „klebt“ die Leiste oben? (dann unter den Header schieben, solange dieser sichtbar ist)
+  const sentinel = $('.cn-sentinel');
+  if (sentinel) new IntersectionObserver(([e]) => nav.classList.toggle('stuck', !e.isIntersecting && e.boundingClientRect.top < 0)).observe(sentinel);
 
-  // Detail-Karte (Sheet) beim Klick auf ein Gericht
-  type It = { nr: string | null; name: string; desc: string | null; price: string; size: string | null; spicy: string | null; veg: boolean; sig: boolean; out: boolean; img: string | null; all: string[]; add: string[]; sauces: { k: string; name: string; spicy: string | null }[] | null };
-  const data: { cat: string; side: string | null; img: string | null; items: It[] }[] = JSON.parse($('#dishData')!.textContent || '[]');
+  /* Detail-Karte (Sheet) */
+  type It = { nr: string | null; name: string; desc: string | null; price: string; size: string | null; spicy: string | null; veg: boolean; sig: boolean; out: boolean; img: string | null; id: string; all: string[]; add: string[]; sauces: { k: string; name: string; spicy: string | null; info?: string }[] | null };
+  const data: { cat: string; side: string | null; items: It[] }[] = JSON.parse($('#dishData')!.textContent || '[]');
   const sheet = $('#sheet')!, panel = $('.sheet-panel', sheet)!;
   const el = (id: string) => $('#' + id)!;
   let cur: HTMLElement | null = null, lastFocus: HTMLElement | null = null;
@@ -339,21 +378,24 @@ if (menu) {
     el('shDesc').textContent = it.desc ?? '';
     el('shDesc').hidden = !it.desc;
     const badges: string[] = [];
-    if (it.sig) badges.push('<span class="tg s"><svg><use href="#i-flame"/></svg>Empfehlung des Hauses</span>');
+    if (it.sig) badges.push('<span class="tg s"><svg><use href="#i-flame"/></svg>Empfehlung</span>');
     if (it.veg) badges.push('<span class="tg v"><svg><use href="#i-leaf"/></svg>vegetarisch</span>');
     if (it.spicy) badges.push(`<span class="tg h"><svg><use href="#i-chili"/></svg>${esc(it.spicy)}</span>`);
     if (it.out) badges.push('<span class="tg o">Heute leider aus</span>');
     el('shBadges').innerHTML = badges.join('');
     el('shPrice').textContent = it.price;
     el('shSide').textContent = c.side ?? '';
+    el('shSide').hidden = !c.side;
     const sc = el('shSauces');
-    sc.innerHTML = it.sauces ? '<h3>Soße nach Wahl</h3><ul class="chips sauces2">' + it.sauces.map((x) => `<li><b>${esc(x.k)}</b>${esc(x.name ?? '')}${x.spicy ? ` <em>· ${esc(x.spicy)}</em>` : ''}</li>`).join('') + '</ul>' : '';
+    sc.innerHTML = it.sauces ? '<h4>Soße nach Wahl</h4><ul class="sauces3">' + it.sauces.map((x) => `<li><b>${esc(x.k)}</b><span>${esc(x.name ?? '')}${x.spicy ? ` <em>· ${esc(x.spicy)}</em>` : ''}${x.info ? `<small>${esc(x.info)}</small>` : ''}</span></li>`).join('') + '</ul>' : '';
     sc.hidden = !it.sauces;
-    el('shAll').innerHTML = it.all.length ? it.all.map((x) => `<li>${esc(x)}</li>`).join('') : '<li class="none">Keine Angaben</li>';
-    el('shAdd').innerHTML = it.add.length ? it.add.map((x) => `<li>${esc(x)}</li>`).join('') : '<li class="none">Keine</li>';
+    el('shAll').innerHTML = it.all.length ? it.all.map((x) => `<li>${esc(x)}</li>`).join('') : (it.sauces ? '<li class="none">Je nach Soße (siehe oben)</li>' : '<li class="none">Keine Angaben</li>');
+    el('shAdd').innerHTML = it.add.length ? it.add.map((x) => `<li>${esc(x)}</li>`).join('') : (it.sauces ? '<li class="none">Je nach Soße (siehe oben)</li>' : '<li class="none">Keine</li>');
     panel.scrollTop = 0;
+    // teilbarer Link auf das Gericht (ohne Scroll-Sprung)
+    history.replaceState(null, '', '#' + it.id);
   };
-  const visibleDishes = () => dishes.filter((d) => !d.hidden && !d.closest('.mcat')!.hidden);
+  const visibleDishes = () => dishes.filter((d) => !d.hidden && !(d.closest(".mcat") as HTMLElement).hidden);
   const open = (d: HTMLElement) => {
     lastFocus = d; fill(d);
     sheet.hidden = false; requestAnimationFrame(() => sheet.classList.add('open'));
@@ -362,16 +404,15 @@ if (menu) {
   const close = () => {
     sheet.classList.remove('open'); body.classList.remove('lock');
     setTimeout(() => { sheet.hidden = true; }, reduce ? 0 : 450);
-    lastFocus?.focus();
+    history.replaceState(null, '', location.pathname + location.search);
+    lastFocus?.focus({ preventScroll: true });
   };
-  const step = (k: number) => { const v = visibleDishes(), j = v.indexOf(cur!); const n2 = v[(j + k + v.length) % v.length]; if (n2) { fill(n2); n2.scrollIntoView({ block: 'center', behavior: 'auto' }); } };
+  const step = (k: number) => { const v = visibleDishes(), j = v.indexOf(cur!); const n2 = v[(j + k + v.length) % v.length]; if (n2) { fill(n2); lastFocus = n2; n2.scrollIntoView({ block: 'center', behavior: 'auto' }); } };
   dishes.forEach((d) => {
     d.addEventListener('click', () => open(d));
     d.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(d); } });
   });
   $$('[data-close]', sheet).forEach((b) => b.addEventListener('click', close));
-  el('shPrev').addEventListener('click', () => step(-1));
-  el('shNext').addEventListener('click', () => step(1));
   addEventListener('keydown', (e) => {
     if (sheet.hidden) return;
     if (e.key === 'Escape') close();
@@ -383,9 +424,64 @@ if (menu) {
       else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
     }
   });
+  // Direktlink …/speisekarte/#gericht-40a → Gericht zeigen und Details öffnen
+  const deep = location.hash.startsWith('#gericht-') ? $(location.hash) : null;
+  if (deep && deep.classList.contains('dcard')) { deep.scrollIntoView({ block: 'center' }); setTimeout(() => open(deep), 300); }
   // Mobil: nach unten wischen zum Schließen
   let sy = 0, dy = 0;
   panel.addEventListener('touchstart', (e) => { sy = e.touches[0].clientY; dy = 0; }, { passive: true });
   panel.addEventListener('touchmove', (e) => { if (panel.scrollTop > 0) return; dy = Math.max(0, e.touches[0].clientY - sy); panel.style.transform = dy ? `translateY(${dy}px)` : ''; }, { passive: true });
   panel.addEventListener('touchend', () => { panel.style.transform = ''; if (dy > 110) close(); });
+}
+
+/* ---------- Motion v2: Überschriften, Staffelungen, Ornamente ---------- */
+if (!reduce) {
+  // 1) Überschriften: Vorhang-Reveal. Eigener Observer pro Element
+  //    (mehrere Überschriften können denselben Eltern-Container haben).
+  const hio = new IntersectionObserver((es) => es.forEach((e) => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in'); hio.unobserve(e.target);
+  }), { rootMargin: '0px 0px -8% 0px' });
+  // .hscroll (horizontal gepinnt) hat eigene Bewegung → ausgenommen
+  $$('main h2, .pagehero h1, .clock h3, .ticket h3')
+    .filter((h) => !h.matches('[data-words], #burstH, #zoomH, .sheet *, .hscroll *'))
+    .forEach((h) => { h.classList.add('hrv'); hio.observe(h); });
+
+  // 2) Kicker-Linie wächst
+  $$('main .kicker, .foot .kicker')
+    .filter((k) => !k.matches('.hscroll *, .sheet *'))
+    .forEach((k) => { k.classList.add('kw'); hio.observe(k); });
+
+  // 3) Trenner-Ornamente zeichnen sich
+  $$('svg.orn').forEach((o) => { o.classList.add('draw'); targets.set(o, o); io.observe(o); });
+
+  // 4) Gestaffelte Elemente: was gemeinsam sichtbar wird, erscheint nacheinander
+  const stag = new IntersectionObserver((es) => {
+    es.filter((e) => e.isIntersecting).forEach((e, i) => {
+      const el = e.target as HTMLElement, d = Math.min(i, 8) * 70;
+      el.style.setProperty('--d', d + 'ms');
+      el.classList.add('in');
+      stag.unobserve(el);
+      // danach aufräumen, damit Hover-Übergänge nicht verzögert sind
+      setTimeout(() => { el.classList.remove('sti', 'in'); el.style.removeProperty('--d'); }, d + 1000);
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  $$('.dcard, .rv, .nums > div, .foot .cols > div, .slots > div, .days li')
+    .forEach((el) => { el.classList.add('sti'); stag.observe(el); });
+}
+
+/* Videos: nur abspielen, wenn sichtbar; Standbild bleibt darunter als Fallback */
+if (!reduce) {
+  const vids = $$<HTMLVideoElement>('video[data-vid]');
+  const vio = new IntersectionObserver((es) => es.forEach((e) => {
+    const v = e.target as HTMLVideoElement;
+    if (e.isIntersecting) {
+      if (v.preload === 'none') { v.preload = 'auto'; v.load(); }
+      v.play().catch(() => {});
+    } else v.pause();
+  }), { rootMargin: '200px 0px' });
+  vids.forEach((v) => {
+    v.addEventListener('playing', () => v.classList.add('on'), { once: true });
+    vio.observe(v);
+  });
 }
