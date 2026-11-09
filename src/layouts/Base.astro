@@ -112,8 +112,8 @@ const year = new Date().getFullYear();
       <span class="kicker c-gold">Hunger?</span>
       <div class="cta"><a class="tel" href={site.tel} data-hover="ANRUFEN">{site.phone}</a><a class="btn" href="/speisekarte/" data-mag><span>Speisekarte</span><span class="ic"><svg><use href="#i-arrow" /></svg></span></a></div>
       <div class="cols">
-        <div><h2>Adresse</h2><p>{site.name}<br />{site.street}<br />{site.zip} {site.city}</p><p class="foot-links"><a href={site.mapsUrl} target="_blank" rel="noopener">Route planen →</a><a href={social.googleUrl} target="_blank" rel="noopener">Google-Bewertungen →</a>{social.instagram && <a href={social.instagram} target="_blank" rel="noopener">Instagram →</a>}</p></div>
-        <div><h2>Öffnungszeiten</h2><p>Di – So · 10:30 – 15:00<br />und 17:00 – 21:30<br />Mo Ruhetag (an Feiertagen geöffnet)</p><span class="ost foot-ost" data-open-status hidden><i></i><span data-t></span></span><p class="foot-links"><a href={site.menuPdf} download>Speisekarte als PDF ↓</a></p></div>
+        <div><h2>Adresse</h2><p>{site.name}<br />{site.street}<br />{site.zip} {site.city}</p></div>
+        <div><h2>Öffnungszeiten</h2><p>Di – So · 10:30 – 15:00<br />und 17:00 – 21:30<br />Mo Ruhetag (an Feiertagen geöffnet)</p><span class="ost foot-ost" data-open-status hidden><i></i><span data-t></span></span></div>
         <div><h2>Lieferservice</h2><p>{site.delivery.hours}<br />Mindestbestellwert {site.delivery.min} € in {site.city}<br />ab {site.delivery.promoFrom} €: 1 Flasche Wein gratis</p></div>
       </div>
       <div class="word" aria-hidden="true">{site.name}</div>

@@ -1193,3 +1193,6 @@ html{background:var(--jade);overscroll-behavior-y:none}
   .zsnap{top:calc(.9 * (240 - 100) * var(--lv) + 150px);scroll-snap-align:start;scroll-snap-stop:always}
 }
 @media(hover:none) and (pointer:coarse) and (max-width:860px){.zsnap{top:calc(.9 * (240 - 100) * var(--lv) + var(--hdr) + 60px)}}
+/* Footer: Impressum/Datenschutz sofort als Links erkennbar */
+.foot .bot a{color:var(--gold);text-decoration:underline;text-decoration-color:rgba(226,166,81,.4);text-underline-offset:3px;transition:color .3s,text-decoration-color .3s}
+.foot .bot a:hover{color:var(--gold-2);text-decoration-color:currentColor}
