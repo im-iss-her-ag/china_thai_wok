@@ -1129,3 +1129,56 @@ body.lock .to-ov{opacity:0;pointer-events:none}
   .mcat{content-visibility:auto;contain-intrinsic-size:auto 1400px}
   @media(max-width:700px){.mcat{contain-intrinsic-size:auto 1800px}}
 }
+
+/* ===== iOS: kein Gummiband-Effekt am Seitenrand, und falls doch: dunkler Hintergrund statt weißer Fläche ===== */
+html{background:var(--jade);overscroll-behavior-y:none}
+
+/* ===== Mobile Navigation: goldene Box gleitet beim Seitenwechsel zwischen Startseite ↔ Speisekarte ===== */
+.nav-ind{display:none}
+@media(max-width:860px){
+  .hdr nav.hnav{display:grid;grid-auto-flow:column;grid-auto-columns:auto;position:relative}
+  .hdr nav.hnav > a{grid-row:1;position:relative;z-index:1;background:none!important}
+  .hdr nav.hnav > a:nth-of-type(1){grid-column:1}
+  .hdr nav.hnav > a:nth-of-type(2){grid-column:2}
+  .hdr nav.hnav > a[aria-current=page]{color:var(--jade)}
+  .nav-ind{display:block;grid-row:1;grid-column:1;border-radius:30px;background:var(--gold);z-index:0;view-transition-name:nav-ind}
+  .hnav.p-2 .nav-ind{grid-column:2}
+  .hnav.p-0 .nav-ind{display:none}
+}
+::view-transition-group(nav-ind){animation-duration:.42s;animation-timing-function:cubic-bezier(.65,0,.35,1)}
+::view-transition-old(nav-ind),::view-transition-new(nav-ind){animation:none;height:100%}
+/* Mobile Nav mit „Startseite“: normale Schreibweise statt gesperrter Versalien → passt neben Name + Adresse */
+@media(max-width:860px){
+  .hdr nav.hnav{font:700 12.5px/1 var(--font);letter-spacing:0;text-transform:none}
+  .hdr nav.hnav > a{padding:0 11px}
+}
+@media(max-width:480px){
+  .brand{font-size:15.5px}
+  .hdr nav.hnav{font-size:12px}
+  .hdr nav.hnav > a{padding:0 9px}
+}
+@media(max-width:370px){
+  .brand{font-size:14.5px}
+  .brand small{font-size:7px}
+  .hdr nav.hnav{font-size:11px}
+  .hdr nav.hnav > a{padding:0 7px}
+}
+@media(max-width:480px){.brand small{font:600 10px/1 var(--font);letter-spacing:.01em;text-transform:none}}
+@media(max-width:370px){.brand small{font-size:9px}}
+@media(max-width:480px){
+  .hdr nav.hnav{font-size:11.5px;padding:3px}
+  .hdr nav.hnav > a{padding:0 8px}
+  .brand small{font-size:9.5px}
+  .hdr .wrap{gap:6px}
+}
+@media(max-width:370px){.hdr nav.hnav{font-size:10.5px}.hdr nav.hnav > a{padding:0 6px}.brand{font-size:14px}.brand small{font-size:8.5px}}
+@media(max-width:385px){.hdr nav.hnav{font-size:10.5px}.hdr nav.hnav > a{padding:0 6px}.brand{font-size:14px}.brand small{font-size:8.5px}.hdr .call{width:34px;height:34px}.hdr .call .ic{width:26px;height:26px}}
+@media(max-width:340px){.brand{font-size:13px}.brand small{font-size:7.5px}.hdr nav.hnav{font-size:9.5px}.hdr nav.hnav > a{padding:0 5px}}
+
+/* „Ein Blick in den Wok“ mobil: größere Schrift + größerer Kreis/Ring */
+@media(max-width:700px){
+  .zoom .zpre{font-size:clamp(54px,17vw,92px);line-height:.88}
+  .zoom .zpre .a{top:calc(var(--hdr) + 26px)}
+  .zoom .zpre .b{bottom:calc(10 * var(--lv))}
+  .zoom .ring{width:66vw}
+}

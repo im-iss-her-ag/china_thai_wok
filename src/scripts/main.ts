@@ -146,9 +146,32 @@ if (burst && bpin) scrollers.push(() => {
 });
 
 const zs = $('#zoom'), zp = $('#zpin');
+// Mobil: Kreis startet größer (füllt den Bildschirm besser)
+const zr0 = () => (innerWidth <= 700 ? 22 : 14);
+/* „Bremse“ am Wok-Video: Wer mit Schwung über die Sektion wischt, stoppt dort, wo der Kreis ganz offen ist
+   (Video bildschirmfüllend, Text sichtbar). Nur Touch, nur abwärts, nur bei hoher Geschwindigkeit, 1× pro Durchgang. */
+const ZOOM_STOP_T = 0.9;
+let zPrevY = scrollY, zPrevTs = performance.now(), zArmed = true, zHolding = false;
+const zoomStopY = () => zs ? zs.getBoundingClientRect().top + scrollY + (zs.offsetHeight - VH) * ZOOM_STOP_T : 0;
+const holdAt = (y: number) => {
+  zHolding = true;
+  const el = [root, body];
+  el.forEach((e) => { e.style.overflow = 'hidden'; }); // stoppt den Schwung (iOS/Android)
+  scrollTo({ top: y, behavior: 'instant' as ScrollBehavior });
+  setTimeout(() => { el.forEach((e) => { e.style.overflow = ''; }); zHolding = false; }, 420);
+};
+if (zs && matchMedia('(pointer: coarse)').matches && !reduce) addEventListener('scroll', () => {
+  if (zHolding) return;
+  const y = scrollY, now = performance.now(), v = (y - zPrevY) / Math.max(1, now - zPrevTs); // px/ms
+  const stop = zoomStopY();
+  if (y < zs.getBoundingClientRect().top + scrollY - VH) zArmed = true; // oberhalb wieder scharf schalten
+  if (zArmed && zPrevY < stop && y >= stop && v > 2) { zArmed = false; holdAt(stop); }
+  else if (y > stop + VH) zArmed = false;
+  zPrevY = y; zPrevTs = now;
+}, { passive: true });
 if (zs && zp) scrollers.push(() => {
   const r = zs.getBoundingClientRect(), t = clamp(-r.top / (r.height - VH));
-  zp.style.setProperty('--r', 14 + t * t * 80 + '%');
+  zp.style.setProperty('--r', zr0() + t * t * (94 - zr0()) + '%');
   zp.style.setProperty('--s', String(1.3 - t * 0.3));
   zp.style.setProperty('--po', String(clamp(1 - t * 3)));
   zp.style.setProperty('--o', String(clamp((t - 0.55) * 3)));

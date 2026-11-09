@@ -38,7 +38,7 @@ const restaurant = {
   sameAs: [social.googleUrl, social.instagram].filter(Boolean),
 };
 const nav = [
-  { href: '/', t: 'Startseite', s: 'Start', key: 'home' },
+  { href: '/', t: 'Startseite', s: 'Startseite', key: 'home' },
   { href: '/speisekarte/', t: 'Speisekarte', s: 'Speisekarte', key: 'menu' },
 ];
 const year = new Date().getFullYear();
@@ -92,7 +92,7 @@ const year = new Date().getFullYear();
   <header class="hdr" id="hdr">
     <div class="wrap">
       <a class="brand" href="/" aria-label={`${site.name}, ${site.street}, ${site.city} – Startseite`}><span class="bn">{site.name}</span><small>{site.street} · {site.city}</small></a>
-      <nav aria-label="Hauptnavigation">
+      <nav aria-label="Hauptnavigation" class={`hnav p-${page === "menu" ? 2 : page === "home" ? 1 : 0}`}><span class="nav-ind" aria-hidden="true"></span>
         {nav.map((n) => <a href={n.href} aria-current={page === n.key ? 'page' : undefined}><span class="l" data-t={n.t}>{n.t}</span><span class="m">{n.s}</span></a>)}
       </nav>
       <span class="ost hdr-ost" data-open-status hidden><i></i><span data-t></span></span>
