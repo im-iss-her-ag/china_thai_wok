@@ -39,11 +39,14 @@ const hdr = $('#hdr')!;
 let lastY = scrollY;
 let hidden = false;
 const onHeader = () => {
+  if (body.classList.contains('lock')) return; // Detail-Karte offen (body fixiert) → Header unverändert lassen
   const y = Math.min(Math.max(scrollY, 0), Math.max(0, document.documentElement.scrollHeight - innerHeight));
   hdr.classList.toggle('solid', y > 40);
   const d = y - lastY;
   if (Math.abs(d) < 12) return; // kleine Zuckungen (Leiste, Gummiband) ignorieren
-  hidden = y > 400 && d > 0;
+  // Am Handy bleibt der Header immer stehen: Ein-/Ausblenden bei jedem Richtungswechsel kam zusammen mit
+  // der Browserleiste als „Springen“ rüber. Nur am Desktop beim Runterscrollen ausblenden.
+  hidden = innerWidth > 860 && y > 400 && d > 0;
   hdr.classList.toggle('hide', hidden);
   body.classList.toggle('hdr-on', !hidden);
   lastY = y;
@@ -424,14 +427,31 @@ if (menu) {
     // teilbarer Link auf das Gericht (ohne Scroll-Sprung)
     history.replaceState(null, '', '#' + it.id);
   };
-  const visibleDishes = () => dishes.filter((d) => !d.hidden && !(d.closest(".mcat") as HTMLElement).hidden);
+  /* Hintergrund sperren: iOS ignoriert overflow:hidden am body → auf Touch-Geräten body fixieren und Position merken */
+  const touch = matchMedia('(pointer: coarse)').matches;
+  let lockY = 0, locked = false;
+  const lockScroll = () => {
+    if (locked) return; locked = true;
+    body.classList.add('lock');
+    if (!touch) return;
+    lockY = scrollY;
+    Object.assign(body.style, { position: 'fixed', top: `-${lockY}px`, left: '0', right: '0', width: '100%' });
+  };
+  const unlockScroll = () => {
+    if (!locked) return; locked = false;
+    body.classList.remove('lock');
+    if (!touch) return;
+    Object.assign(body.style, { position: '', top: '', left: '', right: '', width: '' });
+    scrollTo({ top: lockY, behavior: 'instant' as ScrollBehavior });
+  };
+  const visibleDishes = () =>dishes.filter((d) => !d.hidden && !(d.closest(".mcat") as HTMLElement).hidden);
   const open = (d: HTMLElement) => {
     lastFocus = d; fill(d);
     sheet.hidden = false; requestAnimationFrame(() => sheet.classList.add('open'));
-    body.classList.add('lock'); ($('.sheet-x', sheet) as HTMLElement).focus();
+    lockScroll(); ($('.sheet-x', sheet) as HTMLElement).focus({ preventScroll: true });
   };
   const close = () => {
-    sheet.classList.remove('open'); body.classList.remove('lock');
+    sheet.classList.remove('open'); unlockScroll();
     setTimeout(() => { sheet.hidden = true; }, reduce ? 0 : 450);
     history.replaceState(null, '', location.pathname + location.search);
     lastFocus?.focus({ preventScroll: true });
@@ -439,6 +459,8 @@ if (menu) {
   const step = (k: number) => { const v = visibleDishes(), j = v.indexOf(cur!); const n2 = v[(j + k + v.length) % v.length]; if (n2) { fill(n2); lastFocus = n2; n2.scrollIntoView({ block: 'center', behavior: 'auto' }); } };
   dishes.forEach((d) => {
     d.addEventListener('click', () => open(d));
+    // Großes Bild schon beim Antippen laden → Detail-Karte zeigt es sofort
+    d.addEventListener('pointerdown', () => { const it = data[+d.dataset.ci!]?.items[+d.dataset.di!]; if (it?.img) new Image().src = it.img; }, { passive: true });
     d.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(d); } });
   });
   $$('[data-close]', sheet).forEach((b) => b.addEventListener('click', close));
@@ -456,11 +478,28 @@ if (menu) {
   // Direktlink …/speisekarte/#gericht-40a → Gericht zeigen und Details öffnen
   const deep = location.hash.startsWith('#gericht-') ? $(location.hash) : null;
   if (deep && deep.classList.contains('dcard')) { deep.scrollIntoView({ block: 'center' }); setTimeout(() => open(deep), 300); }
-  // Mobil: nach unten wischen zum Schließen
-  let sy = 0, dy = 0;
-  panel.addEventListener('touchstart', (e) => { sy = e.touches[0].clientY; dy = 0; }, { passive: true });
-  panel.addEventListener('touchmove', (e) => { if (panel.scrollTop > 0) return; dy = Math.max(0, e.touches[0].clientY - sy); panel.style.transform = dy ? `translateY(${dy}px)` : ''; }, { passive: true });
-  panel.addEventListener('touchend', () => { panel.style.transform = ''; if (dy > 110) close(); });
+  // Mobil: nach unten wischen zum Schließen – nur wenn der Inhalt ganz oben ist. Während des Ziehens keine
+  // CSS-Transition (sonst hinkt das Panel dem Finger hinterher) und kein iOS-Gummiband im Panel.
+  let sy = 0, dy = 0, dragging = false, startTop = 0;
+  panel.addEventListener('touchstart', (e) => { sy = e.touches[0].clientY; dy = 0; dragging = false; startTop = panel.scrollTop; }, { passive: true });
+  panel.addEventListener('touchmove', (e) => {
+    const move = e.touches[0].clientY - sy;
+    if (!dragging) {
+      if (startTop <= 0 && panel.scrollTop <= 0 && move > 8) { dragging = true; panel.classList.add('drag'); sy += move; }
+      else return;
+    }
+    e.preventDefault();
+    dy = Math.max(0, e.touches[0].clientY - sy);
+    panel.style.transform = `translate3d(0,${dy}px,0)`;
+  }, { passive: false });
+  const endDrag = () => {
+    if (!dragging) return;
+    dragging = false; panel.classList.remove('drag');
+    panel.style.transform = '';
+    if (dy > 110) close();
+  };
+  panel.addEventListener('touchend', endDrag);
+  panel.addEventListener('touchcancel', endDrag);
 }
 
 /* ---------- Motion v2: Überschriften, Staffelungen, Ornamente ---------- */
@@ -495,7 +534,7 @@ if (!reduce) {
       setTimeout(() => { el.classList.remove('sti', 'in'); el.style.removeProperty('--d'); }, d + 1000);
     });
   }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-  $$('.dcard, .rv, .nums > div, .foot .cols > div, .slots > div, .days li')
+  $$('.rv, .nums > div, .foot .cols > div, .slots > div, .days li')
     .forEach((el) => { el.classList.add('sti'); stag.observe(el); });
 }
 

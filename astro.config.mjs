@@ -10,4 +10,8 @@ export default defineConfig({
   trailingSlash: 'always',
   integrations: [sitemap()],
   build: { inlineStylesheets: 'auto' },
+  // Seiten vorladen, sobald Links sichtbar sind → Wechsel Start ↔ Speisekarte ohne Wartezeit
+  prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
+  // Chrome/Android: per Speculation Rules sogar vorrendern (Safari ignoriert es und nutzt normales Prefetch)
+  experimental: { clientPrerender: true },
 });
