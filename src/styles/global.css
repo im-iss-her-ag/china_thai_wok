@@ -1182,3 +1182,14 @@ html{background:var(--jade);overscroll-behavior-y:none}
   .zoom .zpre .b{bottom:calc(10 * var(--lv))}
   .zoom .ring{width:66vw}
 }
+
+/* „Bremse“ am Wok-Video (Touch): natives Scroll-Snapping. Ein unsichtbarer Haltepunkt dort, wo der Kreis ganz
+   offen ist (90 % der Pin-Strecke). scroll-snap-stop:always → ein schneller Wisch kann ihn nicht überspringen,
+   der Browser bremst den Schwung selbst weich ab. Kein JS, kein Sprung, kein Flackern. */
+.zsnap{position:absolute;left:0;width:1px;height:1px;pointer-events:none;visibility:hidden}
+@media(hover:none) and (pointer:coarse) and (prefers-reduced-motion:no-preference){
+  html{scroll-snap-type:y proximity}
+  /* Zielposition = Abschnittsanfang + 0,9 × (Höhe − Viewport); scroll-padding-top wird beim Snappen addiert */
+  .zsnap{top:calc(.9 * (240 - 100) * var(--lv) + 150px);scroll-snap-align:start;scroll-snap-stop:always}
+}
+@media(hover:none) and (pointer:coarse) and (max-width:860px){.zsnap{top:calc(.9 * (240 - 100) * var(--lv) + var(--hdr) + 60px)}}
